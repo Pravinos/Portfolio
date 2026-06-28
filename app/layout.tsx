@@ -32,9 +32,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     url: "https://portfolio.prav1nos.me",
-    title: "Pravinos Thomas | Software Engineer ",
-    description: "Backend and AI engineer based in Thessaloniki, Greece.",
-    siteName: "Pravinos Thomas | Software Engineer",
+    title: "Pravinos Thomas | Software Engineer",
+    description:
+      "Software engineer based in Thessaloniki, Greece. Backend, AI tooling, and full-stack development with Java, Python, Spring Boot, and React.",
+    siteName: "Pravinos Thomas",
     images: [
       {
         url: "/og-image.png",
@@ -47,7 +48,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Pravinos Thomas | Software Engineer",
-    description: "Backend and AI engineer based in Thessaloniki, Greece.",
+    description:
+      "Software engineer based in Thessaloniki, Greece. Backend, AI tooling, and full-stack development with Java, Python, Spring Boot, and React.",
     images: ["/og-image.png"],
   },
   robots: {
