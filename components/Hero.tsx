@@ -120,6 +120,7 @@ export default function Hero() {
           <a
             href="#projects"
             className="rounded bg-green px-4 py-2 font-sans text-base text-bg transition hover:opacity-90"
+            onClick={() => trackEvent("click", "cta", "hero_view_projects")}
           >
             view projects
           </a>
@@ -128,7 +129,7 @@ export default function Hero() {
             target="_blank"
             rel="noopener noreferrer"
             className="border-none bg-transparent font-sans text-base text-muted transition-colors hover:text-text"
-            onClick={() => trackEvent("cta_click", { location: "github_hero" })}
+            onClick={() => trackEvent("click", "cta", "hero_github")}
           >
             github ↗
           </a>
@@ -137,7 +138,7 @@ export default function Hero() {
             target="_blank"
             rel="noopener noreferrer"
             className="border-none bg-transparent font-sans text-base text-muted transition-colors hover:text-text"
-            onClick={() => trackEvent("cta_click", { location: "linkedin_hero" })}
+            onClick={() => trackEvent("click", "cta", "hero_linkedin")}
           >
             linkedin ↗
           </a>

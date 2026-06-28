@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { trackEvent } from "@/lib/analytics";
 
 type ProjectData = {
   id: string;
@@ -133,6 +134,9 @@ function ProjectCard({
             rel="noopener noreferrer"
             aria-label={`${project.name} on GitHub`}
             className="text-[#888888] transition-colors hover:text-[#00ff9d]"
+            onClick={() =>
+              trackEvent("click", "project", `project_${project.id}_github`)
+            }
           >
             <GitHubIcon />
           </a>
@@ -164,6 +168,9 @@ function ProjectCard({
           target="_blank"
           rel="noopener noreferrer"
           className="font-mono text-[13px] text-green transition-colors hover:text-greenBright"
+          onClick={() =>
+            trackEvent("click", "project", `project_${project.id}_github`)
+          }
         >
           {project.githubSecondary ? "↗ api repo" : "↗ view repo"}
         </a>
@@ -173,6 +180,13 @@ function ProjectCard({
             target="_blank"
             rel="noopener noreferrer"
             className="font-mono text-[13px] text-green transition-colors hover:text-greenBright"
+            onClick={() =>
+              trackEvent(
+                "click",
+                "project",
+                `project_${project.id}_frontend_github`
+              )
+            }
           >
             ↗ {project.githubSecondaryLabel}
           </a>

@@ -29,6 +29,7 @@ export default function Contact() {
 
   const handleEmailCopy = async () => {
     await navigator.clipboard.writeText(EMAIL);
+    trackEvent("click", "contact", "contact_email");
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
@@ -83,7 +84,9 @@ export default function Contact() {
             transition={{ duration: 0.4, delay: (index + 1) * 0.1 }}
             viewport={{ once: true }}
             className={rowClassName}
-            onClick={() => trackEvent("contact_click", { link: link.id })}
+            onClick={() =>
+              trackEvent("click", "contact", `contact_${link.id}`)
+            }
           >
             <span className="text-[#888888]">$ open </span>
             <span className="text-[#00ff9d]">{link.display}</span>

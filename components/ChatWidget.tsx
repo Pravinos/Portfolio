@@ -198,12 +198,12 @@ export default function ChatWidget() {
 
       <motion.button
         type="button"
-        onClick={() =>
+        onClick={() => {
           setIsOpen((open) => {
-            if (!open) trackEvent("chat_open", { location: "widget" });
+            if (!open) trackEvent("open", "ai_widget", "chat_widget_opened");
             return !open;
-          })
-        }
+          });
+        }}
         aria-label={isOpen ? "Close chat" : "Open chat"}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

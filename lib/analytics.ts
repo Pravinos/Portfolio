@@ -12,13 +12,17 @@ export function updateGtagConsent(granted: boolean): void {
 }
 
 export const trackEvent = (
-  eventName: string,
-  params?: Record<string, string>
+  action: string,
+  category: string,
+  label?: string
 ) => {
   if (getAnalyticsConsent() !== "granted") return;
   if (typeof window === "undefined" || !window.gtag) return;
 
-  window.gtag("event", eventName, params);
+  window.gtag("event", action, {
+    event_category: category,
+    event_label: label,
+  });
 };
 
 declare global {
