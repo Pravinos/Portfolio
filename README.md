@@ -1,6 +1,6 @@
 # Pravinos Thomas — Portfolio
 
-A dark, terminal-themed developer portfolio built with Next.js. It showcases bio, education, work history, projects, certifications, and contact links — plus a floating AI chat widget powered by Groq that answers questions about your background from structured CV data.
+My personal developer portfolio — a dark, terminal-inspired single page at [portfolio.prav1nos.me](https://portfolio.prav1nos.me). It covers my background, education, work history, projects, and certifications, with a floating AI chat that answers questions about my CV.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)
@@ -8,197 +8,92 @@ A dark, terminal-themed developer portfolio built with Next.js. It showcases bio
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38BDF8?style=flat-square&logo=tailwindcss&logoColor=white)
 ![Groq](https://img.shields.io/badge/Groq-Llama_3.3-00ff9d?style=flat-square)
 
-## Features
+## Why I built it this way
 
-- **Terminal aesthetic** — Monospace typography, green accent (`#00ff9d`), and dark surfaces inspired by a dev environment
-- **Animated sections** — Framer Motion entrance animations, typewriter hero titles, and scroll-triggered timeline/card reveals
-- **Smart navigation** — Fixed nav with `IntersectionObserver`-based active section highlighting, a mobile hamburger menu, and condensed mobile nav (education and certifications hidden on small screens)
-- **About section** — Personal bio, quick facts, language proficiency bars, and a “currently” status line
-- **Education** — Degree details, thesis highlight (SpaceDot / AcubeSAT), and academic project cards with GitHub links
-- **Work history timeline** — Vertical timeline with experience entries, highlights, and staggered animations
-- **Project grid** — Responsive cards with tech stack pills, GitHub links, optional secondary repos, and optional live demo links
-- **Certifications** — Credential cards with issuer, issue date, verification links, and skill tags
-- **Contact section** — Terminal-style command rows with one-click email copy to clipboard
-- **AI chat widget** — Streaming assistant grounded in your CV via a Groq-backed API route
-- **SEO ready** — Dynamic `metadataBase`, Open Graph, Twitter cards, keywords, and theme colour metadata
+I wanted a portfolio that felt like mine — not a generic template. The terminal aesthetic (`#00ff9d` on `#0a0a0a`, monospace-style section labels like `// about`, command-row contact links) matches how I actually work: dark editor, green accents, code-first presentation.
+
+Everything lives on one scrollable page. Recruiters and collaborators can skim the full picture in one pass, and the nav uses `IntersectionObserver` to highlight whichever section is in view. On mobile, education and certifications drop out of the nav to keep the menu usable.
+
+Rather than a static PDF or a LinkedIn link dump, I added an AI chat widget grounded in structured CV data. Visitors can ask natural questions — stack, experience, thesis, projects — and get answers streamed back from Groq. The site content and the AI knowledge base stay in sync via `lib/cv-context.ts`.
+
+## What’s on the site
+
+- **Hero** — Rotating typewriter titles and skill pills
+- **About** — Bio, quick facts, language bars, and a “currently” status line
+- **Education** — Degree, SpaceDot / AcubeSAT thesis, academic project cards
+- **Experience** — Vertical timeline with Deloitte, military service, Synapsecom, SpaceDot, and internship entries
+- **Projects** — Responsive cards with stack tags, GitHub links, and live demos where they exist
+- **Certifications** — Credential cards with verification links
+- **Contact** — Terminal-style `$ open` rows; email copies to clipboard on click
+- **AI chat** — Floating drawer with starter questions and streaming responses
+- **Privacy** — GDPR-oriented policy page with cookie preference controls
+
+## How I built it
+
+### Stack and structure
+
+Next.js 16 App Router, React 19, TypeScript, Tailwind CSS v4, and Framer Motion for animations. The AI layer uses the Vercel AI SDK with Groq (`llama-3.3-70b-versatile`). Typography is [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) — used for both body and mono-style labels.
+
+The app is a single route (`app/page.tsx`) composed of section components. Personal content is mostly inline in those components; the chat assistant reads from `lib/cv-context.ts`, which mirrors the same facts in a prompt-friendly format.
+
+```
+portfolio/
+├── app/
+│   ├── api/chat/route.ts      # Streaming chat endpoint (rate-limited)
+│   ├── privacy/page.tsx       # Privacy policy
+│   ├── robots.ts / sitemap.ts # SEO helpers
+│   ├── globals.css            # Scrollbar, selection, cursor blink
+│   ├── layout.tsx             # Fonts, metadata, consent wrapper
+│   └── page.tsx               # Single-page layout
+├── components/                # Nav, sections, chat, consent UI
+├── lib/
+│   ├── cv-context.ts          # CV data + AI system prompt
+│   ├── groq.ts                # Groq client + model config
+│   ├── consent.ts             # Cookie consent persistence
+│   └── analytics.ts           # GA event helpers (consent-gated)
+└── tailwind.config.ts         # Colour tokens
+```
+
+### Design
+
+Colour tokens live in `tailwind.config.ts`: near-black background (`#0a0a0a`), elevated surfaces (`#111111` / `#1a1a1a`), green primary (`#00ff9d`), blue secondary (`#0ea5e9`) for highlights like language bars. Section entrances use Framer Motion `whileInView` so animations fire once on scroll, not on every re-render.
+
+The hero typewriter cycles through titles with a simple state machine — type, pause, delete, next — no extra library.
+
+### Navigation
+
+Fixed nav tracks section visibility with `IntersectionObserver` (50% visibility threshold). Mobile gets a hamburger menu; education and certifications are hidden from the condensed nav on small screens.
+
+### AI chat
+
+`POST /api/chat` rate-limits to 10 requests per minute per IP (in-memory), injects CV context as the system prompt, and streams via Groq. The widget uses `@ai-sdk/react`’s `useChat` hook with starter questions to reduce blank-page friction.
+
+Model and token limits are configured in `lib/groq.ts`.
+
+### Analytics and consent
+
+Google Analytics loads only after explicit opt-in. A consent banner and footer “cookie preferences” control persist the choice in local storage; `trackEvent` no-ops until consent is granted. Events cover contact clicks and chat interactions — enough to see what people use, without collecting more than necessary. A `/privacy` page documents the setup under GDPR.
+
+### SEO
+
+Metadata in `layout.tsx` sets `metadataBase`, Open Graph, Twitter cards, and keywords. `robots.ts` and `sitemap.ts` point at the live domain. Google site verification lives in `public/`.
 
 ## Tech stack
 
 | Layer | Tools |
 | --- | --- |
-| Framework | [Next.js 16](https://nextjs.org) (App Router) |
-| UI | [React 19](https://react.dev) |
+| Framework | Next.js 16 (App Router) |
+| UI | React 19 |
 | Language | TypeScript |
 | Styling | Tailwind CSS v4 |
 | Animation | Framer Motion |
-| AI | [Vercel AI SDK](https://sdk.vercel.ai) + [Groq](https://groq.com) (`llama-3.3-70b-versatile`) |
-| Font | [Geist Mono](https://vercel.com/font) |
-
-## Getting started
-
-### Prerequisites
-
-- Node.js 20+
-- A [Groq API key](https://console.groq.com) (required for the chat widget)
-
-### Installation
-
-```bash
-git clone <your-repo-url>
-cd portfolio
-npm install
-```
-
-### Environment variables
-
-Copy `.env.example` to `.env.local` and fill in the values:
-
-```bash
-cp .env.example .env.local
-```
-
-```env
-GROQ_API_KEY=your_groq_api_key_here
-NEXT_PUBLIC_SITE_URL=https://your-domain.com
-```
-
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `GROQ_API_KEY` | Yes (for chat) | Groq API access for the AI chat widget |
-| `NEXT_PUBLIC_SITE_URL` | No | Canonical site URL for Open Graph / social metadata (defaults to Vercel URL or `http://localhost:3000`) |
-
-The chat API route will not work without `GROQ_API_KEY`. All other sections render without it.
-
-### Development
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-### Production build
-
-```bash
-npm run build
-npm start
-```
-
-### Lint
-
-```bash
-npm run lint
-```
-
-## Project structure
-
-```
-portfolio/
-├── app/
-│   ├── api/chat/route.ts   # Streaming AI chat endpoint (rate-limited)
-│   ├── globals.css         # Global styles, scrollbar, cursor blink
-│   ├── layout.tsx          # Root layout, fonts, SEO metadata
-│   └── page.tsx            # Single-page layout and section IDs
-├── components/
-│   ├── Nav.tsx             # Fixed nav + mobile menu
-│   ├── Hero.tsx            # Typewriter hero + skill pills
-│   ├── About.tsx           # Bio, facts, languages, current status
-│   ├── Education.tsx       # Degree, thesis, academic projects
-│   ├── Experience.tsx      # Work history timeline
-│   ├── Projects.tsx        # Project grid
-│   ├── Certifications.tsx  # Professional certifications
-│   ├── Contact.tsx         # Contact links + footer
-│   └── ChatWidget.tsx      # Floating AI chat drawer
-├── lib/
-│   ├── cv-context.ts       # CV data + AI system prompt
-│   └── groq.ts             # Groq client singleton + model config
-├── types/
-│   └── index.ts            # Shared TypeScript types
-├── public/                 # Static assets (add og-image.png here)
-├── .env.example            # Environment variable template
-├── tailwind.config.ts      # Design tokens and colour palette
-└── next.config.ts          # Next.js configuration
-```
-
-## Page sections
-
-The site is a single scrollable page with these anchor sections:
-
-| Section | ID | Component |
-| --- | --- | --- |
-| Hero | `#hero` | `Hero.tsx` |
-| About | `#about` | `About.tsx` |
-| Education | `#education` | `Education.tsx` |
-| Experience | `#experience` | `Experience.tsx` |
-| Projects | `#projects` | `Projects.tsx` |
-| Certifications | `#certifications` | `Certifications.tsx` |
-| Contact | `#contact` | `Contact.tsx` |
-
-## Customisation
-
-Most personal content lives in a handful of files:
-
-| What to change | File |
-| --- | --- |
-| Name, typewriter titles, skill pills | `components/Hero.tsx` |
-| Bio, facts, languages, current status | `components/About.tsx` |
-| Degree, thesis, academic projects | `components/Education.tsx` |
-| Work history | `components/Experience.tsx` |
-| Projects | `components/Projects.tsx` |
-| Certifications | `components/Certifications.tsx` |
-| Email, LinkedIn, GitHub | `components/Contact.tsx` |
-| AI knowledge base (CV data) | `lib/cv-context.ts` |
-| Site title, description, OG metadata | `app/layout.tsx` |
-| Colour palette | `tailwind.config.ts` |
-
-Keep `lib/cv-context.ts` in sync with the visible portfolio content so the AI assistant stays accurate.
-
-## AI chat
-
-The chat widget sends messages to `POST /api/chat`, which:
-
-1. Rate-limits requests to **10 per minute per IP** (in-memory; resets on server restart)
-2. Injects CV context from `lib/cv-context.ts` as the system prompt
-3. Streams responses from Groq via the Vercel AI SDK
-
-To change the model or token limit, edit `lib/groq.ts`:
-
-```ts
-export const CHAT_MODEL = "llama-3.3-70b-versatile";
-export const MAX_TOKENS = 1024;
-```
+| AI | Vercel AI SDK + Groq |
+| Analytics | Google Analytics (consent-gated) |
+| Font | Space Grotesk |
 
 ## Deployment
 
-Deploy to [Vercel](https://vercel.com) (recommended) or any Node.js host that supports Next.js App Router.
-
-1. Push the repo to GitHub
-2. Import the project in Vercel
-3. Add environment variables:
-   - `GROQ_API_KEY` — required for the chat widget
-   - `NEXT_PUBLIC_SITE_URL` — your production domain (e.g. `https://yourname.dev`)
-4. Deploy
-
-Before going live, also:
-
-- Set `NEXT_PUBLIC_SITE_URL` to your real domain so social previews resolve correctly
-- Add `/public/og-image.png` (1200×630) for Open Graph and Twitter previews
-- Add a favicon at `app/icon.png` or `app/favicon.ico`
-- Swap CV/project/experience data with your own if forking this template
-
-## Design tokens
-
-Defined in `tailwind.config.ts`:
-
-| Token | Value | Usage |
-| --- | --- | --- |
-| Background | `#0a0a0a` | Page background |
-| Surface | `#111111` / `#1a1a1a` | Cards, panels |
-| Border | `#2a2a2a` | Dividers, outlines |
-| Primary / green | `#00ff9d` | Accent, links, CTAs |
-| Secondary / blue | `#0ea5e9` | Language bars, highlights |
-| Body text | `#e2e2e2` | Headings, main copy |
-| Muted | `#888888` | Secondary text |
+Hosted on Vercel at [portfolio.prav1nos.me](https://portfolio.prav1nos.me). Environment variables on the host: `GROQ_API_KEY` for the chat API, `NEXT_PUBLIC_SITE_URL` for canonical URLs, and `NEXT_PUBLIC_GA_ID` for analytics.
 
 ## License
 

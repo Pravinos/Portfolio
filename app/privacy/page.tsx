@@ -5,7 +5,7 @@ import { CookiePreferencesButton } from "@/components/CookiePreferencesButton";
 export const metadata: Metadata = {
   title: "Privacy Policy — Pravinos Thomas",
   description:
-    "Privacy policy for pravinos.dev, including Google Analytics and your data rights under GDPR.",
+    "Privacy policy for portfolio.prav1nos.me, including Google Analytics and your data rights under GDPR.",
   robots: {
     index: true,
     follow: true,
