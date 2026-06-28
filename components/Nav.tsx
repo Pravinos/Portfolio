@@ -19,7 +19,6 @@ const NAV_LINKS = [
     href: "#education",
     label: "education",
     sectionId: "education",
-    mobileHidden: true,
   },
   { href: "#experience", label: "experience", sectionId: "experience" },
   { href: "#projects", label: "projects", sectionId: "projects" },
@@ -27,7 +26,6 @@ const NAV_LINKS = [
     href: "#certifications",
     label: "certifications",
     sectionId: "certifications",
-    mobileHidden: true,
   },
   { href: "#contact", label: "contact", sectionId: "contact" },
 ] as const;
@@ -103,11 +101,11 @@ export default function Nav() {
         </a>
 
         <div className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map(({ href, label, sectionId, mobileHidden }) => (
+          {NAV_LINKS.map(({ href, label, sectionId }) => (
             <a
               key={sectionId}
               href={href}
-              className={`${linkClassName(sectionId)} ${mobileHidden ? "hidden md:block" : ""}`}
+              className={linkClassName(sectionId)}
             >
               {label}
             </a>
