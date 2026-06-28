@@ -10,7 +10,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://portfolio.prav1nos.me"),
-  title: "Pravinos Thomas | Portfolio",
+  title: "Pravinos Thomas | Software Engineer",
   description:
     "Software engineer based in Thessaloniki, Greece. Backend, AI tooling, and full-stack development with Java, Python, Spring Boot, and React.",
   keywords: [
