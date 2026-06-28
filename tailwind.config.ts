@@ -5,6 +5,7 @@ const config: Config = {
     extend: {
       colors: {
         background: "#0a0a0a",
+        bg: "#0a0a0a",
         surface: {
           DEFAULT: "#111111",
           elevated: "#1a1a1a",

@@ -84,11 +84,10 @@ const EXPERIENCES: ExperienceData[] = [
 
 export default function Experience() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-24">
-      <p className="font-mono text-sm text-[#888888]">// experience</p>
-      <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2]">Work History</h2>
+    <div className="mx-auto max-w-3xl px-4 pt-20 pb-16">
+      <p className="font-mono text-lg text-[#888888]">// experience</p>
 
-      <div className="relative mt-12">
+      <div className="relative mt-10">
         <div className="absolute bottom-0 left-[7px] top-0 w-0.5 bg-[#2a2a2a]" />
 
         {EXPERIENCES.map((experience, index) => (
@@ -102,19 +101,19 @@ export default function Experience() {
           >
             <div className="absolute left-[2px] top-1.5 h-3 w-3 rounded-full bg-[#00ff9d] ring-2 ring-[#00ff9d]/20" />
 
-            <p className="text-lg font-semibold text-[#00ff9d]">
+            <p className="text-2xl font-semibold text-[#00ff9d]">
               {experience.company}
             </p>
-            <p className="font-medium text-[#e2e2e2]">{experience.role}</p>
-            <p className="text-sm text-[#888888]">
+            <p className="text-xl font-medium text-[#e2e2e2]">{experience.role}</p>
+            <p className="text-lg text-[#888888]">
               {experience.startDate} – {experience.endDate} · {experience.location}
             </p>
 
-            <p className="mt-2 text-sm leading-relaxed text-[#888888]">
+            <p className="mt-2 text-lg leading-relaxed text-[#888888]">
               {experience.description}
             </p>
 
-            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-[#aaaaaa]">
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-lg text-[#aaaaaa]">
               {experience.bullets.map((bullet) => (
                 <li key={bullet}>{bullet}</li>
               ))}

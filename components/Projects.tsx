@@ -118,13 +118,13 @@ function ProjectCard({
       className={`rounded-lg border border-[#2a2a2a] bg-[#111111] transition-colors duration-300 hover:border-[#00ff9d]/50 hover:shadow-[0_0_20px_rgba(0,255,157,0.05)] ${featured ? "p-6" : compact ? "p-4" : "p-4"}`}
     >
       {project.context && (
-        <p className="mb-2 font-mono text-[11px] text-dim">
+        <p className="mb-2 font-mono text-[13px] text-dim">
           ⊕ {project.context}
         </p>
       )}
 
       <div className="flex items-start justify-between gap-4">
-        <h3 className="text-lg font-semibold text-[#e2e2e2]">{project.name}</h3>
+        <h3 className="text-2xl font-semibold text-[#e2e2e2]">{project.name}</h3>
 
         <div className="flex shrink-0 items-center gap-3">
           <a
@@ -139,19 +139,19 @@ function ProjectCard({
         </div>
       </div>
 
-      <p className="mt-2 text-sm leading-relaxed text-[#888888]">
+      <p className="mt-2 text-lg leading-relaxed text-[#888888]">
         {project.description}
       </p>
 
       {((featured || compact) && project.detail) && (
-        <p className="mt-2 text-xs leading-relaxed text-dim">{project.detail}</p>
+        <p className="mt-2 text-base leading-relaxed text-dim">{project.detail}</p>
       )}
 
       <div className="mt-4 flex flex-wrap gap-2">
         {project.stack.map((tech) => (
           <span
             key={tech}
-            className="rounded border border-[#2a2a2a] bg-[#0a0a0a] px-2 py-0.5 font-mono text-xs text-[#00ff9d]"
+            className="rounded border border-[#2a2a2a] bg-[#0a0a0a] px-2 py-0.5 font-mono text-base text-[#00ff9d]"
           >
             {tech}
           </span>
@@ -163,7 +163,7 @@ function ProjectCard({
           href={project.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-mono text-[11px] text-green transition-colors hover:text-greenBright"
+          className="font-mono text-[13px] text-green transition-colors hover:text-greenBright"
         >
           {project.githubSecondary ? "↗ api repo" : "↗ view repo"}
         </a>
@@ -172,7 +172,7 @@ function ProjectCard({
             href={project.githubSecondary}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-[11px] text-green transition-colors hover:text-greenBright"
+            className="font-mono text-[13px] text-green transition-colors hover:text-greenBright"
           >
             ↗ {project.githubSecondaryLabel}
           </a>
@@ -184,9 +184,9 @@ function ProjectCard({
 
 export default function Projects() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-24">
-      <p className="font-mono text-sm text-[#888888]">// projects</p>
-      <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2]">
+    <div className="mx-auto max-w-5xl px-4 pt-16 pb-24">
+      <p className="font-mono text-lg text-[#888888]">// projects</p>
+      <h2 className="mt-2 text-5xl font-bold text-[#e2e2e2]">
         Things I&apos;ve Built
       </h2>
 
@@ -202,7 +202,7 @@ export default function Projects() {
 
       <div className="mt-12 border-t border-border pt-10">
         <div className="mb-6 flex items-center gap-3">
-          <p className="font-mono text-[10px] uppercase tracking-[3px] text-dim">
+          <p className="font-mono text-[12px] uppercase tracking-[3px] text-dim">
             // built during military service
           </p>
           <div className="h-px flex-1 bg-border" />

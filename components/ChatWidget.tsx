@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import type { UIMessage } from "ai";
+import { trackEvent } from "@/lib/analytics";
 
 const STARTER_QUESTIONS = [
   "What's your tech stack?",
@@ -107,13 +108,13 @@ export default function ChatWidget() {
             <div className="flex items-center justify-between border-b border-[#2a2a2a] px-4 py-3">
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-[#00ff9d]" />
-                <span className="text-sm text-[#e2e2e2]">Ask me anything</span>
+                <span className="text-lg text-[#e2e2e2]">Ask me anything</span>
               </div>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
                 aria-label="Close chat"
-                className="text-xl leading-none text-[#888888] transition-colors hover:text-[#e2e2e2]"
+                className="text-3xl leading-none text-[#888888] transition-colors hover:text-[#e2e2e2]"
               >
                 ×
               </button>
@@ -129,7 +130,7 @@ export default function ChatWidget() {
                 return (
                   <div
                     key={message.id}
-                    className={`rounded-lg border px-3 py-2 text-sm ${
+                    className={`rounded-lg border px-3 py-2 text-lg ${
                       isUser
                         ? "ml-8 border-[#00ff9d]/20 bg-[#00ff9d]/10 text-[#e2e2e2]"
                         : "mr-8 border-[#2a2a2a] bg-[#1a1a1a] text-[#e2e2e2]"
@@ -141,7 +142,7 @@ export default function ChatWidget() {
               })}
 
               {isLoading && (
-                <div className="mr-8 rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] px-3 py-2 text-sm text-[#888888]">
+                <div className="mr-8 rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] px-3 py-2 text-lg text-[#888888]">
                   <span className="animate-pulse">...</span>
                 </div>
               )}
@@ -156,7 +157,7 @@ export default function ChatWidget() {
                     key={question}
                     type="button"
                     onClick={() => handleStarterQuestion(question)}
-                    className="rounded-full border border-[#2a2a2a] bg-[#1a1a1a] px-3 py-1.5 text-xs text-[#888888] transition hover:border-[#00ff9d] hover:text-[#00ff9d]"
+                    className="rounded-full border border-[#2a2a2a] bg-[#1a1a1a] px-3 py-1.5 text-base text-[#888888] transition hover:border-[#00ff9d] hover:text-[#00ff9d]"
                   >
                     {question}
                   </button>
@@ -165,7 +166,7 @@ export default function ChatWidget() {
             )}
 
             {error && (
-              <div className="mx-3 mb-2 rounded border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-400">
+              <div className="mx-3 mb-2 rounded border border-red-500/30 bg-red-500/10 px-3 py-2 text-base text-red-400">
                 Something went wrong. Try again.
               </div>
             )}
@@ -181,12 +182,12 @@ export default function ChatWidget() {
                 onKeyDown={handleKeyDown}
                 placeholder="Ask about my experience..."
                 disabled={isLoading}
-                className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-sm text-[#e2e2e2] placeholder-[#555555] focus:border-[#00ff9d] focus:outline-none disabled:opacity-50"
+                className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-lg text-[#e2e2e2] placeholder-[#555555] focus:border-[#00ff9d] focus:outline-none disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                className="rounded-lg bg-[#00ff9d] px-3 py-2 text-sm font-bold text-[#0a0a0a] disabled:opacity-40"
+                className="rounded-lg bg-[#00ff9d] px-3 py-2 text-lg font-bold text-[#0a0a0a] disabled:opacity-40"
               >
                 Send
               </button>
@@ -197,7 +198,12 @@ export default function ChatWidget() {
 
       <motion.button
         type="button"
-        onClick={() => setIsOpen((open) => !open)}
+        onClick={() =>
+          setIsOpen((open) => {
+            if (!open) trackEvent("chat_open", { location: "widget" });
+            return !open;
+          })
+        }
         aria-label={isOpen ? "Close chat" : "Open chat"}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

@@ -1,21 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
+import { ConsentProvider } from "@/components/ConsentProvider";
 import "./globals.css";
 
-const geistMono = Geist_Mono({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-space-grotesk",
 });
-
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
 // TODO: Add /public/og-image.png (1200x630px) for Open Graph and Twitter cards.
 // TODO: Add a favicon at app/icon.png or app/favicon.ico.
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL("https://portfolio.prav1nos.me"),
   title: "Pravinos Thomas — Software Engineer",
   description:
     "Software engineer based in Thessaloniki, Greece. Backend, AI tooling, and full-stack development with Java, Python, Spring Boot, and React.",
@@ -37,6 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_GB",
+    url: "https://portfolio.prav1nos.me",
     title: "Pravinos Thomas — Software Engineer",
     description: "Backend and AI engineer based in Thessaloniki, Greece.",
     siteName: "Pravinos Thomas",
@@ -71,11 +69,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-[#0a0a0a]">
+    <html lang="en" className={`bg-[#0a0a0a] ${spaceGrotesk.variable}`}>
       <body
-        className={`${geistMono.className} bg-[#0a0a0a] text-[#e2e2e2] antialiased`}
+        className={`${spaceGrotesk.className} bg-[#0a0a0a] text-[#e2e2e2] antialiased`}
       >
-        {children}
+        <ConsentProvider gaId={process.env.NEXT_PUBLIC_GA_ID}>
+          {children}
+        </ConsentProvider>
       </body>
     </html>
   );

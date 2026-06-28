@@ -69,9 +69,9 @@ const OTHER_HIGHLIGHTS = [
 
 export function Education() {
   return (
-    <div className="px-6 py-20 md:px-16">
+    <div className="px-6 pt-16 pb-16 md:px-16">
       <div className="mx-auto max-w-5xl">
-        <p className="font-mono text-sm text-muted">// education & research</p>
+        <p className="font-mono text-lg text-muted">// education & research</p>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -80,16 +80,16 @@ export function Education() {
           viewport={{ once: true, margin: "-80px" }}
           className="mt-12 flex gap-4"
         >
-          <span className="font-mono text-xs text-green">[ AUTH ]</span>
+          <span className="font-mono text-base text-green">[ AUTH ]</span>
           <div>
-            <p className="text-base font-medium text-text">
+            <p className="text-xl font-medium text-text">
               Integrated Master&apos;s degree — Electrical &amp; Computer
               Engineering
             </p>
-            <p className="mt-1 font-mono text-xs text-blue">
+            <p className="mt-1 font-mono text-base text-blue">
               Aristotle University of Thessaloniki
             </p>
-            <div className="mt-1 flex flex-wrap gap-4 font-mono text-[11px] text-dim">
+            <div className="mt-1 flex flex-wrap gap-4 font-mono text-[13px] text-dim">
               <span>Oct 2018 – Sep 2024</span>
               <span>Grade: 7.07</span>
               <span>5-year integrated Master's programme</span>
@@ -105,18 +105,18 @@ export function Education() {
           className="mt-10 border-l-2 border-green pl-6"
         >
           <div className="flex items-center gap-3">
-            <p className="font-mono text-[10px] uppercase tracking-[3px] text-green">
+            <p className="font-mono text-[12px] uppercase tracking-[3px] text-green">
               // thesis
             </p>
             <div className="h-px flex-1 bg-border" />
           </div>
 
-          <p className="mt-4 text-sm font-medium text-text">
+          <p className="mt-4 text-lg font-medium text-text">
             Fault Detection, Isolation, and Recovery (FDIR) for Nanosatellite
             Subsystems
           </p>
 
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+          <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted">
             This thesis focuses on the implementation of a Fault Detection,
             Isolation, and Remediation (FDIR) architecture based on the European
             ECSS Packet Utilization Standard. The C++ implementation includes
@@ -135,14 +135,14 @@ export function Education() {
 
           <div className="mt-5 rounded border border-border bg-[#0a0a0a]/80 p-4">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="font-mono text-[10px] uppercase tracking-[2px] text-green">
+              <span className="font-mono text-[12px] uppercase tracking-[2px] text-green">
                 SpaceDot · AcubeSAT
               </span>
-              <span className="font-mono text-[11px] text-dim">
+              <span className="font-mono text-[13px] text-dim">
                 Jul 2023 – Jul 2024 · volunteer
               </span>
             </div>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+            <p className="mt-2 max-w-2xl text-lg leading-relaxed text-muted">
               Implemented as part of the SpaceDot / AcubeSAT mission by the
               students of Aristotle University of Thessaloniki. This work was
               conducted as a volunteer role from July 2023 to July 2024.
@@ -152,7 +152,7 @@ export function Education() {
                 href="https://github.com/Pravinos/AcubeSat-ECSS-ST12-Service"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-mono text-[11px] text-green transition-colors hover:text-greenBright"
+                className="inline-flex items-center gap-1 font-mono text-[13px] text-green transition-colors hover:text-greenBright"
               >
                 ↗ GitHub Repository
               </a>
@@ -160,7 +160,7 @@ export function Education() {
                 href="https://ikee.lib.auth.gr/record/356385"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-mono text-[11px] text-green transition-colors hover:text-greenBright"
+                className="inline-flex items-center gap-1 font-mono text-[13px] text-green transition-colors hover:text-greenBright"
               >
                 ↗ IKEE — AUTH Library
               </a>
@@ -171,7 +171,7 @@ export function Education() {
             {THESIS_TAGS.map((tag) => (
               <span
                 key={tag}
-                className="rounded border border-[#2a2a2a] bg-[#0a0a0a] px-2 py-0.5 font-mono text-xs text-[#00ff9d]"
+                className="rounded border border-[#2a2a2a] bg-[#0a0a0a] px-2 py-0.5 font-mono text-base text-[#00ff9d]"
               >
                 {tag}
               </span>
@@ -180,7 +180,7 @@ export function Education() {
         </motion.div>
 
         <div className="mt-12">
-          <p className="font-mono text-[10px] uppercase tracking-[3px] text-dim">
+          <p className="font-mono text-[12px] uppercase tracking-[3px] text-dim">
             // academic projects
           </p>
 
@@ -198,26 +198,26 @@ export function Education() {
                     : "border-l border-border py-1 pl-4"
                 }
               >
-                <p className="text-sm font-medium text-text">
+                <p className="text-lg font-medium text-text">
                   {item.title}
                 </p>
                 {item.highlight && (
-                  <p className="font-mono text-[10px] text-green">
+                  <p className="font-mono text-[12px] text-green">
                     ↳ led to thesis &amp; SpaceDot
                   </p>
                 )}
-                <p className="mt-0.5 font-mono text-[11px] text-blue">
+                <p className="mt-0.5 font-mono text-[13px] text-blue">
                   {item.org}
                 </p>
-                <p className="font-mono text-[11px] text-dim">{item.date}</p>
-                <p className="mt-1 text-xs leading-relaxed text-muted">
+                <p className="font-mono text-[13px] text-dim">{item.date}</p>
+                <p className="mt-1 text-base leading-relaxed text-muted">
                   {item.note}
                 </p>
                 <a
                   href={item.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 inline-block font-mono text-[11px] text-green transition-colors hover:text-greenBright"
+                  className="mt-2 inline-block font-mono text-[13px] text-green transition-colors hover:text-greenBright"
                 >
                   ↗ view repo
                 </a>
@@ -225,19 +225,19 @@ export function Education() {
             ))}
           </div>
 
-          <p className="mt-10 font-mono text-[10px] uppercase tracking-[3px] text-dim">
+          <p className="mt-10 font-mono text-[12px] uppercase tracking-[3px] text-dim">
             // other highlights
           </p>
 
           <ul className="mt-4 space-y-2">
             {OTHER_HIGHLIGHTS.map((item) => (
               <li key={item.title} className="flex items-baseline gap-3">
-                <span className="font-mono text-xs text-dim">▸</span>
-                <span className="text-sm text-muted">
+                <span className="font-mono text-base text-dim">▸</span>
+                <span className="text-lg text-muted">
                   {item.title}
                 </span>
-                <span className="font-mono text-[11px] text-dim">·</span>
-                <span className="font-mono text-[11px] text-dim">
+                <span className="font-mono text-[13px] text-dim">·</span>
+                <span className="font-mono text-[13px] text-dim">
                   {item.meta}
                 </span>
               </li>

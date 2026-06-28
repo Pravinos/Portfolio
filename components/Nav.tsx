@@ -79,7 +79,7 @@ export default function Nav() {
   }, []);
 
   const linkClassName = (sectionId: string) =>
-    `font-mono text-sm transition-colors ${
+    `font-mono text-lg transition-colors ${
       activeSection === sectionId
         ? "text-[#00ff9d]"
         : "text-[#888888] hover:text-[#00ff9d]"
@@ -95,7 +95,7 @@ export default function Nav() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <a
           href="#hero"
-          className="font-mono text-[#00ff9d] transition-opacity hover:opacity-80"
+          className="font-mono text-lg text-[#00ff9d] transition-opacity hover:opacity-80"
         >
           ~/thomas
         </a>

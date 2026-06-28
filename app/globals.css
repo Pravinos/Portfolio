@@ -6,13 +6,14 @@ html {
 }
 
 @theme inline {
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-space-grotesk);
 }
 
 /* Scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #00ff9d #111111;
+  scrollbar-color: #30363d #0a0e13;
 }
 
 *::-webkit-scrollbar {
@@ -21,16 +22,16 @@ html {
 }
 
 *::-webkit-scrollbar-track {
-  background: #111111;
+  background: #0a0e13;
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #00ff9d;
+  background: #30363d;
   border-radius: 3px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: #00cc7d;
+  background: #3d444d;
 }
 
 /* Selection */
