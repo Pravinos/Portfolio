@@ -8,12 +8,9 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
-// TODO: Add /public/og-image.png (1200x630px) for Open Graph and Twitter cards.
-// TODO: Add a favicon at app/icon.png or app/favicon.ico.
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://portfolio.prav1nos.me"),
-  title: "Pravinos Thomas — Software Engineer",
+  title: "Pravinos Thomas | Portfolio",
   description:
     "Software engineer based in Thessaloniki, Greece. Backend, AI tooling, and full-stack development with Java, Python, Spring Boot, and React.",
   keywords: [
@@ -35,21 +32,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     url: "https://portfolio.prav1nos.me",
-    title: "Pravinos Thomas — Software Engineer",
+    title: "Pravinos Thomas | Software Engineer ",
     description: "Backend and AI engineer based in Thessaloniki, Greece.",
-    siteName: "Pravinos Thomas",
+    siteName: "Pravinos Thomas | Software Engineer",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Pravinos Thomas — Software Engineer",
+        alt: "Pravinos Thomas | Software Engineer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pravinos Thomas — Software Engineer",
+    title: "Pravinos Thomas | Software Engineer",
     description: "Backend and AI engineer based in Thessaloniki, Greece.",
     images: ["/og-image.png"],
   },

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import type { UIMessage } from "ai";
 import { trackEvent } from "@/lib/analytics";
+import ChatMarkdown from "@/components/ChatMarkdown";
 
 const STARTER_QUESTIONS = [
   "What's your tech stack?",
@@ -136,7 +137,7 @@ export default function ChatWidget() {
                         : "mr-8 border-[#2a2a2a] bg-[#1a1a1a] text-[#e2e2e2]"
                     }`}
                   >
-                    {text}
+                    {isUser ? text : <ChatMarkdown content={text} />}
                   </div>
                 );
               })}

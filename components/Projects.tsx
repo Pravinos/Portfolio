@@ -172,7 +172,7 @@ function ProjectCard({
             trackEvent("click", "project", `project_${project.id}_github`)
           }
         >
-          {project.githubSecondary ? "↗ api repo" : "↗ view repo"}
+          {project.githubSecondary ? "↗ backend repo" : "↗ view repo"}
         </a>
         {project.githubSecondary && project.githubSecondaryLabel && (
           <a
