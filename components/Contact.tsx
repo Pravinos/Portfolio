@@ -23,10 +23,10 @@ const CONTACT_LINKS = [
 ] as const;
 
 const rowClassName =
-  "terminal-interactive flex w-full items-center rounded border border-border bg-surface2 px-4 py-3 text-left font-mono text-lg transition-colors duration-200 hover:border-accent/50";
+  "terminal-interactive flex w-full items-center rounded border border-border bg-surface2 px-4 py-3 text-left font-mono text-base transition-colors duration-200 hover:border-accent/50 md:px-3 md:py-2 md:text-sm";
 
 const copyButtonClassName =
-  "terminal-interactive shrink-0 rounded border border-accent/40 bg-accent/10 px-3 py-1.5 font-mono text-sm text-accent transition-colors duration-200 hover:bg-accent/20 disabled:opacity-60";
+  "terminal-interactive shrink-0 rounded border border-accent/40 bg-accent/10 px-3 py-1.5 font-mono text-sm text-accent transition-colors duration-200 hover:bg-accent/20 disabled:opacity-60 md:px-2.5 md:py-1 md:text-xs";
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
@@ -64,15 +64,15 @@ export default function Contact() {
         </p>
       </motion.div>
 
-      <div className="mt-12 space-y-4">
+      <div className="mx-auto mt-12 max-w-md space-y-3 md:max-w-lg md:space-y-2.5">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col gap-3 rounded border border-border bg-surface2 px-4 py-3 text-left sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-col gap-3 rounded border border-border bg-surface2 px-4 py-3 text-left sm:flex-row sm:items-center sm:justify-between md:gap-2 md:px-3 md:py-2"
         >
-          <p className="min-w-0 font-mono text-lg">
+          <p className="min-w-0 font-mono text-base md:text-sm">
             <span className="text-[#888888]">
               <span className="cmd-prefix-sm-hidden">$ </span>cat contact.txt{" "}
             </span>
