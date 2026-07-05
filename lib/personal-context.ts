@@ -25,7 +25,7 @@ Movies:
 - Favorites: Lord of the Rings Trilogy, Interstellar, Dune Movies
 
 Video games:
-- Favorites: Fifa, League of Legends, PUBG, Clair Obscure: Expedition 33, Hades
+- Favorites: Fifa, League of Legends, PUBG, Clair Obscur: Expedition 33, Hades
 - Most played game: Fifa 
 
 Music:

@@ -6,15 +6,16 @@ import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import type { UIMessage } from "ai";
 import { trackEvent } from "@/lib/analytics";
 import ChatMarkdown from "@/components/ChatMarkdown";
+import { resolveChatError } from "@/lib/chat-errors";
 import { useDraggableWindow } from "@/hooks/useDraggable";
 import { PORTFOLIO_EVENTS } from "@/lib/portfolio-events";
 
 const STARTER_QUESTIONS = [
-  "What's your tech stack?",
-  "Tell me about your projects",
-  "What anime do you like?",
-  "Who's your favourite footballer?",
-  "Any hobbies outside work?",
+  "How did you end up on a nanosatellite mission?",
+  "What LLM tools did you build at Deloitte?",
+  "Why build Vault as a full-stack SaaS?",
+  "How serious is the football thing?",
+  "What keeps you entertained in your free time?",
 ];
 
 const TITLE_BAR_HEIGHT = 40;
@@ -98,6 +99,7 @@ export default function ChatWidget() {
 
   const { messages, sendMessage, status, error } = useChat();
   const isLoading = status === "submitted" || status === "streaming";
+  const chatError = resolveChatError(error);
   const isWindowVisible = isOpen && !isMinimized;
   const useDesktopWindow = !isMobile;
 
@@ -361,9 +363,26 @@ export default function ChatWidget() {
                   </div>
                 )}
 
-                {error && (
-                  <div className="mx-3 mb-2 rounded border border-red-500/30 bg-red-500/10 px-3 py-2 font-mono text-base text-red-400 sm:text-sm">
-                    err: request failed - try again
+                {chatError && (
+                  <div
+                    role="alert"
+                    className={`mx-3 mb-2 rounded border px-3 py-2.5 font-mono text-base sm:text-sm ${
+                      chatError.kind === "rate-limit"
+                        ? "border-amber-500/35 bg-amber-500/10 text-amber-200"
+                        : "border-red-500/30 bg-red-500/10 text-red-400"
+                    }`}
+                  >
+                    <p
+                      className={
+                        chatError.kind === "rate-limit"
+                          ? "text-amber-300"
+                          : "text-red-300"
+                      }
+                    >
+                      {chatError.kind === "rate-limit" ? "warn" : "err"}:{" "}
+                      {chatError.title}
+                    </p>
+                    <p className="mt-1 text-[#c8c8c8]">{chatError.message}</p>
                   </div>
                 )}
 

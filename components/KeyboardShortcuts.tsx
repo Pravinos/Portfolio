@@ -14,6 +14,10 @@ function isTypingTarget(target: EventTarget | null): boolean {
   return false;
 }
 
+function hasShortcutModifier(event: KeyboardEvent): boolean {
+  return event.ctrlKey || event.metaKey || event.altKey;
+}
+
 export default function KeyboardShortcuts() {
   const [helpOpen, setHelpOpen] = useState(false);
 
@@ -66,6 +70,8 @@ export default function KeyboardShortcuts() {
       }
 
       if (helpOpen) return;
+
+      if (hasShortcutModifier(event)) return;
 
       switch (event.key) {
         case "c":

@@ -59,7 +59,10 @@ export function About() {
               <p className="font-sans text-lg leading-relaxed text-muted">
                 I run a home server, self-host tools I build, and keep side
                 projects going for things my day job doesn&apos;t cover. In this
-                way I try to discover new technologies and improve my skills.
+                way I try to discover new technologies and sharpen my skills.
+              </p>
+              <p className="font-sans text-lg leading-relaxed text-muted">
+                Feel free to ask the AI chat for more personal details.
               </p>
             </div>
 

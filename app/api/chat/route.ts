@@ -1,4 +1,5 @@
 import { CHAT_MODEL, groq, MAX_TOKENS } from "@/lib/groq";
+import { formatProviderRateLimitError, isRateLimitError } from "@/lib/chat-errors";
 import { systemPrompt } from "@/lib/cv-context";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { NextRequest } from "next/server";
@@ -48,7 +49,14 @@ export async function POST(req: NextRequest) {
     const ip = getClientIp(req);
 
     if (isRateLimited(ip)) {
-      return new Response("Rate limit exceeded", { status: 429 });
+      return Response.json(
+        {
+          error: "RATE_LIMIT",
+          message:
+            "Too many messages in a short time. Wait about a minute, then try again.",
+        },
+        { status: 429 },
+      );
     }
 
     const body = await req.json();
@@ -71,8 +79,26 @@ export async function POST(req: NextRequest) {
       maxOutputTokens: MAX_TOKENS,
     });
 
-    return result.toUIMessageStreamResponse();
-  } catch {
+    return result.toUIMessageStreamResponse({
+      onError: (error) => {
+        if (isRateLimitError(error)) {
+          return formatProviderRateLimitError(error);
+        }
+
+        return "Something went wrong while reaching the assistant. Please try again.";
+      },
+    });
+  } catch (error) {
+    if (isRateLimitError(error)) {
+      return Response.json(
+        {
+          error: "RATE_LIMIT",
+          message: formatProviderRateLimitError(error).replace(/^RATE_LIMIT\|/, ""),
+        },
+        { status: 429 },
+      );
+    }
+
     return Response.json({ error: "Something went wrong" }, { status: 500 });
   }
 }
