@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { TypingHeader } from "@/components/TypingHeader";
 
 type Certification = {
   id: string;
@@ -73,10 +74,15 @@ const CERTIFICATIONS: Certification[] = [
 
 export function Certifications() {
   return (
-    <div className="px-6 pt-16 pb-16 md:px-16">
+    <div className="section-shell">
       <div className="mx-auto max-w-5xl">
-        <p className="font-mono text-lg text-[#888888]">// certifications</p>
-        <h2 className="mt-2 text-5xl font-bold text-[#e2e2e2]">Certifications</h2>
+        <TypingHeader
+          text="// certifications"
+          className="font-mono text-lg text-[#888888]"
+        />
+        <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2] sm:text-5xl">
+          Skills I&apos;ve Proven
+        </h2>
 
         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {CERTIFICATIONS.map((cert, index) => (
@@ -93,18 +99,18 @@ export function Certifications() {
               </h3>
               <p className="mt-1 font-mono text-base text-blue">{cert.issuer}</p>
               {cert.credentialId && (
-                <p className="font-mono text-[13px] text-dim">
+                <p className="font-mono text-sm text-dim">
                   ID: {cert.credentialId}
                 </p>
               )}
-              <p className="mt-1 font-mono text-[13px] text-dim">{cert.issued}</p>
+              <p className="mt-1 font-mono text-sm text-dim">{cert.issued}</p>
 
               {cert.skills && cert.skills.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1">
                   {cert.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded border border-border bg-surface px-2 py-0.5 font-mono text-[12px] text-dim"
+                      className="rounded border border-border bg-surface px-2 py-0.5 font-mono text-sm text-dim sm:text-[12px]"
                     >
                       {skill}
                     </span>
@@ -117,7 +123,7 @@ export function Certifications() {
                   href={cert.credentialUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-block font-mono text-[13px] text-green transition-colors hover:text-greenBright"
+                  className="terminal-interactive mt-3 inline-flex items-center font-mono text-sm text-accent transition-colors duration-200 hover:text-accent-bright"
                 >
                   ↗ verify credential
                 </a>

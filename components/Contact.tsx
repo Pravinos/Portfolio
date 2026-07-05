@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CookiePreferencesButton } from "@/components/CookiePreferencesButton";
+import { TypingHeader } from "@/components/TypingHeader";
 import { trackEvent } from "@/lib/analytics";
 
 const EMAIL = "tpravinos99@gmail.com";
@@ -22,29 +23,42 @@ const CONTACT_LINKS = [
 ] as const;
 
 const rowClassName =
-  "block w-full rounded border border-[#2a2a2a] bg-[#111111] px-4 py-3 text-left font-mono text-lg transition-colors hover:border-[#00ff9d]/50";
+  "terminal-interactive flex w-full items-center rounded border border-border bg-surface2 px-4 py-3 text-left font-mono text-lg transition-colors duration-200 hover:border-accent/50";
+
+const copyButtonClassName =
+  "terminal-interactive shrink-0 rounded border border-accent/40 bg-accent/10 px-3 py-1.5 font-mono text-sm text-accent transition-colors duration-200 hover:bg-accent/20 disabled:opacity-60";
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleEmailCopy = async () => {
-    await navigator.clipboard.writeText(EMAIL);
-    trackEvent("click", "contact", "contact_email");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      trackEvent("click", "contact", "contact_email_copy");
+      setCopied(true);
+      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-20 pb-32 text-center">
+    <div className="section-shell mx-auto max-w-3xl text-center">
+      <TypingHeader
+        text="// contact"
+        className="font-mono text-lg text-[#888888]"
+      />
+
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         viewport={{ once: true }}
       >
-        <p className="font-mono text-lg text-[#888888]">// contact</p>
-        <h2 className="mt-2 text-5xl font-bold text-[#e2e2e2]">Get In Touch</h2>
-        <p className="mt-4 text-[#888888]">
+        <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2] sm:text-5xl">Get In Touch</h2>
+        <p className="mt-4 text-base text-[#888888] sm:text-lg">
           Have a project in mind or want to collaborate? I&apos;d love to hear
           from you.
         </p>
@@ -56,21 +70,23 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0 }}
           viewport={{ once: true }}
-          className="relative"
+          className="flex flex-col gap-3 rounded border border-border bg-surface2 px-4 py-3 text-left sm:flex-row sm:items-center sm:justify-between"
         >
+          <p className="min-w-0 font-mono text-lg">
+            <span className="text-[#888888]">
+              <span className="cmd-prefix-sm-hidden">$ </span>cat contact.txt{" "}
+            </span>
+            <span className="break-all text-accent sm:break-normal">{EMAIL}</span>
+          </p>
           <button
             type="button"
             onClick={handleEmailCopy}
-            className={rowClassName}
+            disabled={copied}
+            aria-live="polite"
+            className={`${copyButtonClassName} self-end sm:self-auto`}
           >
-            <span className="text-[#888888]">$ open </span>
-            <span className="text-[#00ff9d]">mailto:{EMAIL}</span>
+            {copied ? "Copied!" : "Copy"}
           </button>
-          {copied && (
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 rounded bg-[#00ff9d] px-2 py-0.5 text-base font-medium text-[#0a0a0a]">
-              Copied!
-            </span>
-          )}
         </motion.div>
 
         {CONTACT_LINKS.map((link, index) => (
@@ -88,8 +104,10 @@ export default function Contact() {
               trackEvent("click", "contact", `contact_${link.id}`)
             }
           >
-            <span className="text-[#888888]">$ open </span>
-            <span className="text-[#00ff9d]">{link.display}</span>
+            <span className="text-[#888888]">
+              <span className="cmd-prefix-sm-hidden">$ </span>open{" "}
+            </span>
+            <span className="break-all text-accent sm:break-normal">{link.display}</span>
           </motion.a>
         ))}
       </div>
@@ -99,17 +117,17 @@ export default function Contact() {
           Built with Next.js, Tailwind, Framer Motion &amp; Groq
         </p>
         <p className="text-base text-[#555555]">© 2026 Pravinos Thomas</p>
-        <p className="mt-3 font-mono text-[12px] text-dim">
+        <p className="mt-3 font-mono text-sm text-dim sm:text-[12px]">
           <Link
             href="/privacy"
-            className="text-[#888888] underline underline-offset-2 transition-colors hover:text-[#00ff9d]"
+            className="terminal-interactive inline-flex items-center text-muted underline underline-offset-2 transition-colors duration-200 hover:text-accent"
           >
             privacy policy
           </Link>
           <span className="text-[#555555]"> · </span>
-          <CookiePreferencesButton className="text-[#888888] underline underline-offset-2 transition-colors hover:text-[#00ff9d]" />
+          <CookiePreferencesButton className="terminal-interactive inline-flex items-center text-muted underline underline-offset-2 transition-colors duration-200 hover:text-accent" />
         </p>
-        <p className="font-mono text-[12px] text-dim mt-2">
+        <p className="mt-2 font-mono text-sm text-dim sm:text-[12px]">
           google analytics runs only with your consent. reject anytime via
           cookie preferences.
         </p>

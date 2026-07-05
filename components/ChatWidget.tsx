@@ -6,12 +6,34 @@ import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import type { UIMessage } from "ai";
 import { trackEvent } from "@/lib/analytics";
 import ChatMarkdown from "@/components/ChatMarkdown";
+import { useDraggableWindow } from "@/hooks/useDraggable";
+import { PORTFOLIO_EVENTS } from "@/lib/portfolio-events";
 
 const STARTER_QUESTIONS = [
   "What's your tech stack?",
-  "Tell me about your experience",
-  "What projects have you built?",
+  "Tell me about your projects",
+  "What anime do you like?",
+  "Who's your favourite footballer?",
+  "Any hobbies outside work?",
 ];
+
+const TITLE_BAR_HEIGHT = 36;
+const MOBILE_BREAKPOINT = 768;
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    const update = () => setIsMobile(mediaQuery.matches);
+
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
+}
 
 function getMessageText(message: UIMessage): string {
   return message.parts
@@ -20,58 +42,99 @@ function getMessageText(message: UIMessage): string {
     .join("");
 }
 
-function ChatBubbleIcon() {
+function TerminalPromptIcon() {
   return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        d="M4 5.5C4 4.12 5.12 3 6.5 3h11C18.88 3 20 4.12 20 5.5v7c0 1.38-1.12 2.5-2.5 2.5H9l-4.5 3v-3H6.5C5.12 15 4 13.88 4 12.5v-7Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <span className="font-mono text-base font-bold leading-none" aria-hidden="true">
+      &gt;_
+    </span>
   );
 }
 
-function CloseIcon() {
+function TrafficLights({
+  onClose,
+  onMinimize,
+}: {
+  onClose: () => void;
+  onMinimize: () => void;
+}) {
   return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        d="M6 6l12 12M18 6L6 18"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
+    <div className="flex items-center gap-1.5">
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close chat"
+        className="group flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f57] transition hover:brightness-110"
+      >
+        <span className="text-[8px] font-bold leading-none text-[#4a0000] opacity-0 transition group-hover:opacity-100">
+          ×
+        </span>
+      </button>
+      <button
+        type="button"
+        onClick={onMinimize}
+        aria-label="Minimize chat"
+        className="group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e] transition hover:brightness-110"
+      >
+        <span className="text-[8px] font-bold leading-none text-[#4a3000] opacity-0 transition group-hover:opacity-100">
+          −
+        </span>
+      </button>
+      <span
+        className="h-3 w-3 rounded-full bg-[#28c840]"
+        aria-hidden="true"
       />
-    </svg>
+    </div>
   );
 }
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const { messages, sendMessage, status, error } = useChat();
-
   const isLoading = status === "submitted" || status === "streaming";
+  const isWindowVisible = isOpen && !isMinimized;
+  const useDesktopWindow = !isMobile;
+
+  const {
+    windowRef,
+    position,
+    size,
+    isDragging,
+    isResizing,
+    onDragStart,
+    onResizeStart,
+  } = useDraggableWindow(isOpen && useDesktopWindow);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, status]);
+    if (isWindowVisible) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, status, isWindowVisible]);
+
+  useEffect(() => {
+    const handleOpen = () => {
+      trackEvent("open", "ai_widget", "chat_widget_opened");
+      setIsOpen(true);
+      setIsMinimized(false);
+    };
+
+    const handleClose = () => {
+      setIsOpen(false);
+      setIsMinimized(false);
+    };
+
+    window.addEventListener(PORTFOLIO_EVENTS.openChat, handleOpen);
+    window.addEventListener(PORTFOLIO_EVENTS.closeChat, handleClose);
+
+    return () => {
+      window.removeEventListener(PORTFOLIO_EVENTS.openChat, handleOpen);
+      window.removeEventListener(PORTFOLIO_EVENTS.closeChat, handleClose);
+    };
+  }, []);
 
   const handleSubmit = async (event?: FormEvent) => {
     event?.preventDefault();
@@ -95,122 +158,267 @@ export default function ChatWidget() {
     void sendMessage({ text: question });
   };
 
+  const openChat = () => {
+    trackEvent("open", "ai_widget", "chat_widget_opened");
+    setIsOpen(true);
+    setIsMinimized(false);
+  };
+
+  const closeChat = () => {
+    setIsOpen(false);
+    setIsMinimized(false);
+  };
+
+  const minimizeChat = () => {
+    setIsMinimized(true);
+  };
+
+  const handleToggle = () => {
+    if (!isOpen) {
+      openChat();
+      return;
+    }
+
+    if (isMinimized) {
+      setIsMinimized(false);
+      return;
+    }
+
+    closeChat();
+  };
+
   return (
     <>
       <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-24 right-6 z-50 flex h-[520px] max-h-[calc(100vh-8rem)] w-[380px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-xl border border-[#2a2a2a] bg-[#111111] shadow-2xl shadow-black/50"
-          >
-            <div className="flex items-center justify-between border-b border-[#2a2a2a] px-4 py-3">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-[#00ff9d]" />
-                <span className="text-lg text-[#e2e2e2]">Ask me anything</span>
-              </div>
+        {isOpen && (useDesktopWindow ? position : true) && (
+          <>
+            {isMobile && (
+              <motion.button
+                type="button"
+                aria-label="Close chat"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={closeChat}
+                className="fixed inset-0 z-[89] bg-black/60"
+              />
+            )}
+
+            <motion.div
+              ref={windowRef}
+              data-chat-window
+              initial={
+                isMobile
+                  ? { opacity: 0, y: "100%" }
+                  : { opacity: 0, scale: 0.96 }
+              }
+              animate={
+                isMobile ? { opacity: 1, y: 0 } : { opacity: 1, scale: 1 }
+              }
+              exit={
+                isMobile
+                  ? { opacity: 0, y: "100%" }
+                  : { opacity: 0, scale: 0.96 }
+              }
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              style={
+                useDesktopWindow
+                  ? {
+                      left: position?.x,
+                      top: position?.y,
+                      width: size.width,
+                      height: isMinimized ? TITLE_BAR_HEIGHT : size.height,
+                    }
+                  : undefined
+              }
+              className={`fixed z-[90] flex flex-col overflow-hidden bg-[#0d0d0d] shadow-[0_16px_48px_rgba(0,0,0,0.6)] ${
+                isMobile
+                  ? "inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] h-[60vh] max-h-[calc(100dvh-3.5rem-env(safe-area-inset-bottom,0px)-4rem)] rounded-t-xl border border-b-0 border-[#2a2a2a]"
+                  : "rounded-lg border border-[#2a2a2a]"
+              } ${isDragging || isResizing ? "select-none" : ""} ${
+                isMinimized && useDesktopWindow
+                  ? "shadow-[0_8px_24px_rgba(0,0,0,0.5)]"
+                  : ""
+              }`}
+            >
+            <div
+              onMouseDown={useDesktopWindow ? onDragStart : undefined}
+              className={`flex shrink-0 items-center gap-3 border-b border-[#2a2a2a] bg-[#161616] px-3 py-2 ${
+                useDesktopWindow
+                  ? `cursor-grab active:cursor-grabbing ${isDragging ? "cursor-grabbing" : ""}`
+                  : ""
+              } ${isMinimized && useDesktopWindow ? "border-b-0" : ""}`}
+            >
+              <TrafficLights
+                onClose={closeChat}
+                onMinimize={
+                  isMobile
+                    ? closeChat
+                    : isMinimized
+                      ? () => setIsMinimized(false)
+                      : minimizeChat
+                }
+              />
+
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
-                aria-label="Close chat"
-                className="text-3xl leading-none text-[#888888] transition-colors hover:text-[#e2e2e2]"
+                onClick={() => isMinimized && setIsMinimized(false)}
+                className={`min-w-0 flex-1 truncate text-left font-mono text-sm text-muted sm:text-xs ${
+                  isMinimized
+                    ? "terminal-interactive cursor-pointer transition-colors duration-200 hover:text-text"
+                    : ""
+                }`}
+              >
+                <span className="text-accent">pravinos@portfolio</span>
+                <span className="text-[#555555]">:</span>
+                <span className="text-accent/70">~</span>
+                <span className="text-[#555555]">$ </span>
+                ai-chat
+                {isMinimized && (
+                  <span className="text-[#555555]"> (minimized)</span>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={closeChat}
+                aria-label="Close chat window"
+                className="terminal-interactive inline-flex items-center font-mono text-sm leading-none text-[#555555] transition-colors duration-200 hover:text-text"
               >
                 ×
               </button>
             </div>
 
-            <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
-              {messages.map((message) => {
-                const text = getMessageText(message);
-                if (!text) return null;
+            {!isMinimized && (
+              <>
+                <div className="chat-scroll flex-1 space-y-3 overflow-y-auto px-3 py-3 font-mono text-sm">
+                  {messages.length === 0 && (
+                    <p className="text-[#555555]">
+                      <span className="text-accent">#</span> Ask about my work,
+                      stack, and projects — or get personal: anime, football,
+                      series, games, and more.
+                    </p>
+                  )}
 
-                const isUser = message.role === "user";
+                  {messages.map((message) => {
+                    const text = getMessageText(message);
+                    if (!text) return null;
 
-                return (
-                  <div
-                    key={message.id}
-                    className={`rounded-lg border px-3 py-2 text-lg ${
-                      isUser
-                        ? "ml-8 border-[#00ff9d]/20 bg-[#00ff9d]/10 text-[#e2e2e2]"
-                        : "mr-8 border-[#2a2a2a] bg-[#1a1a1a] text-[#e2e2e2]"
-                    }`}
-                  >
-                    {isUser ? text : <ChatMarkdown content={text} />}
-                  </div>
-                );
-              })}
+                    const isUser = message.role === "user";
 
-              {isLoading && (
-                <div className="mr-8 rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] px-3 py-2 text-lg text-[#888888]">
-                  <span className="animate-pulse">...</span>
+                    return (
+                      <div
+                        key={message.id}
+                        className={`flex ${isUser ? "justify-end" : "justify-start"}`}
+                      >
+                        <div
+                          className={`max-w-[85%] ${
+                            isUser ? "text-right text-accent" : "text-left text-[#e2e2e2]"
+                          }`}
+                        >
+                          <span className="text-[#555555]">
+                            {isUser ? "you@local:~$" : "ai@portfolio:~$"}
+                          </span>{" "}
+                          {isUser ? (
+                            <span>{text}</span>
+                          ) : (
+                            <ChatMarkdown content={text} />
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {isLoading && (
+                    <div className="text-left text-[#555555]">
+                      <span>ai@portfolio:~$</span>{" "}
+                      <span className="animate-pulse text-[#888888]">...</span>
+                    </div>
+                  )}
+
+                  <div ref={bottomRef} />
                 </div>
-              )}
 
-              <div ref={bottomRef} />
-            </div>
+                {messages.length === 0 && (
+                  <div className="flex flex-wrap gap-2 border-t border-[#2a2a2a] px-3 py-2">
+                    {STARTER_QUESTIONS.map((question) => (
+                      <button
+                        key={question}
+                        type="button"
+                        onClick={() => handleStarterQuestion(question)}
+                        className="terminal-interactive inline-flex items-center rounded border border-border bg-surface2 px-2 py-1 font-mono text-sm text-muted transition-colors duration-200 hover:border-accent/50 hover:text-accent sm:text-xs"
+                      >
+                        {question}
+                      </button>
+                    ))}
+                  </div>
+                )}
 
-            {messages.length === 0 && (
-              <div className="flex flex-wrap gap-2 px-4 pb-3">
-                {STARTER_QUESTIONS.map((question) => (
+                {error && (
+                  <div className="mx-3 mb-2 rounded border border-red-500/30 bg-red-500/10 px-3 py-2 font-mono text-sm text-red-400 sm:text-xs">
+                    err: request failed - try again
+                  </div>
+                )}
+
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex shrink-0 items-center gap-2 border-t border-[#2a2a2a] bg-[#111111] px-3 py-2.5"
+                >
+                  <span className="cmd-prefix-sm-hidden shrink-0 font-mono text-sm text-accent">
+                    $
+                  </span>
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(event) => setInput(event.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="ask about my experience..."
+                    disabled={isLoading}
+                    className="min-w-0 flex-1 bg-transparent font-mono text-sm text-[#e2e2e2] placeholder-[#444444] focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 disabled:opacity-50"
+                  />
                   <button
-                    key={question}
-                    type="button"
-                    onClick={() => handleStarterQuestion(question)}
-                    className="rounded-full border border-[#2a2a2a] bg-[#1a1a1a] px-3 py-1.5 text-base text-[#888888] transition hover:border-[#00ff9d] hover:text-[#00ff9d]"
+                    type="submit"
+                    disabled={isLoading || !input.trim()}
+                    className="terminal-interactive inline-flex shrink-0 items-center rounded border border-accent/40 bg-accent/10 px-2.5 py-1 font-mono text-sm text-accent transition-colors duration-200 hover:bg-accent/20 disabled:opacity-40 sm:text-xs"
                   >
-                    {question}
+                    enter
                   </button>
-                ))}
-              </div>
-            )}
+                </form>
 
-            {error && (
-              <div className="mx-3 mb-2 rounded border border-red-500/30 bg-red-500/10 px-3 py-2 text-base text-red-400">
-                Something went wrong. Try again.
-              </div>
+                {useDesktopWindow && (
+                  <div
+                    onMouseDown={onResizeStart}
+                    aria-hidden="true"
+                    className="absolute bottom-0 right-0 h-4 w-4 cursor-se-resize"
+                  >
+                    <svg
+                      viewBox="0 0 10 10"
+                      className="absolute bottom-1 right-1 h-2.5 w-2.5 text-[#444444]"
+                      fill="currentColor"
+                    >
+                      <path d="M9 1v8H1l8-8z" />
+                    </svg>
+                  </div>
+                )}
+              </>
             )}
-
-            <form
-              onSubmit={handleSubmit}
-              className="flex gap-2 border-t border-[#2a2a2a] px-3 py-3"
-            >
-              <input
-                type="text"
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask about my experience..."
-                disabled={isLoading}
-                className="flex-1 rounded-lg border border-[#2a2a2a] bg-[#0a0a0a] px-3 py-2 text-lg text-[#e2e2e2] placeholder-[#555555] focus:border-[#00ff9d] focus:outline-none disabled:opacity-50"
-              />
-              <button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="rounded-lg bg-[#00ff9d] px-3 py-2 text-lg font-bold text-[#0a0a0a] disabled:opacity-40"
-              >
-                Send
-              </button>
-            </form>
           </motion.div>
+          </>
         )}
       </AnimatePresence>
 
       <motion.button
         type="button"
-        onClick={() => {
-          setIsOpen((open) => {
-            if (!open) trackEvent("open", "ai_widget", "chat_widget_opened");
-            return !open;
-          });
-        }}
-        aria-label={isOpen ? "Close chat" : "Open chat"}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#00ff9d] text-[#0a0a0a] shadow-[0_0_20px_rgba(0,255,157,0.3)] transition-shadow hover:shadow-[0_0_20px_rgba(0,255,157,0.3)]"
+        onClick={handleToggle}
+        aria-label={isOpen && !isMinimized ? "Close chat" : "Ask AI"}
+        whileHover={{ scale: 1.04 }}
+        whileTap={{ scale: 0.97 }}
+        className={`ask-ai-pulse terminal-interactive fixed bottom-24 right-6 z-[45] hidden items-center gap-2 rounded-full border border-accent/30 bg-surface2 px-4 py-3 font-mono text-sm text-accent transition-colors duration-200 hover:border-accent/60 hover:bg-surface-elevated md:flex ${
+          isOpen && !isMinimized ? "opacity-80" : ""
+        }`}
       >
-        {isOpen ? <CloseIcon /> : <ChatBubbleIcon />}
+        <TerminalPromptIcon />
+        <span>Ask AI</span>
       </motion.button>
     </>
   );

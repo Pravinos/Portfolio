@@ -2,6 +2,7 @@
 
 import type { Experience as ExperienceEntry } from "@/types";
 import { motion } from "framer-motion";
+import { TypingHeader } from "@/components/TypingHeader";
 
 type ExperienceData = ExperienceEntry & { description: string };
 
@@ -16,9 +17,9 @@ const EXPERIENCES: ExperienceData[] = [
     description:
       "Working in the Engineering, AI & Data department, building smart, scalable software solutions using Java, Python, and modern technologies. Responsibilities span developing RESTful APIs, integrating databases, and applying AI to improve code quality, system performance, and team productivity.",
     bullets: [
-      "Legacy Code Modernisation — Built a Python + LLM tool that translates legacy systems into current technologies, improving migration efficiency during client engagements",
-      "AI Documentation Platform — Developed a Python-based internal tool using LLMs to auto-generate clear documentation for complex codebases, accelerating team onboarding",
-      "Banking Services — Built secure Spring Boot microservices with REST API and database integrations supporting core internal financial operations",
+      "Legacy Code Modernisation - Built a Python + LLM tool that translates legacy systems into current technologies, improving migration efficiency during client engagements",
+      "AI Documentation Platform - Developed a Python-based internal tool using LLMs to auto-generate clear documentation for complex codebases, accelerating team onboarding",
+      "Banking Services - Built secure Spring Boot microservices with REST API and database integrations supporting core internal financial operations",
     ],
   },
   {
@@ -33,7 +34,7 @@ const EXPERIENCES: ExperienceData[] = [
     bullets: [
       "IT systems support, data management, and internal workflow automation for military operations",
       "Technical documentation, process standardisation, and troubleshooting",
-      "Built FireRiskMaps — a fire risk visualisation tool deployed for real internal use within the unit (see Projects)",
+      "Built FireRiskMaps - a fire risk visualisation tool deployed for real internal use within the unit (see Projects)",
     ],
   },
   {
@@ -54,12 +55,12 @@ const EXPERIENCES: ExperienceData[] = [
   {
     id: "spacedot",
     role: "Software Engineer (Volunteer)",
-    company: "SpaceDot — AcubeSAT",
+    company: "SpaceDot - AcubeSAT",
     location: "Thessaloniki, Greece",
     startDate: "Jul 2023",
     endDate: "Jul 2024",
     description:
-      "Worked with the SpaceDot team at Aristotle University of Thessaloniki on software development and testing for the AcubeSAT nanosatellite — a CubeSat mission developed under ECSS aerospace engineering standards.",
+      "Worked with the SpaceDot team at Aristotle University of Thessaloniki on software development and testing for the AcubeSAT nanosatellite - a CubeSat mission developed under ECSS aerospace engineering standards.",
     bullets: [
       "Developed fault-detection software for the AcubeSAT nanosatellite in C++ following ECSS aerospace engineering standards",
       "Contributed to subsystem reliability through rigorous testing and standard compliance",
@@ -84,28 +85,44 @@ const EXPERIENCES: ExperienceData[] = [
 
 export default function Experience() {
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-20 pb-16">
-      <p className="font-mono text-lg text-[#888888]">// experience</p>
+    <div className="section-shell mx-auto max-w-3xl">
+      <TypingHeader
+        text="// experience"
+        className="font-mono text-lg text-[#888888]"
+      />
 
       <div className="relative mt-10">
-        <div className="absolute bottom-0 left-[7px] top-0 w-0.5 bg-[#2a2a2a]" />
+        <div className="absolute bottom-0 left-4 top-0 hidden w-0.5 bg-[#2a2a2a] md:block" />
 
-        {EXPERIENCES.map((experience, index) => (
+        {EXPERIENCES.map((experience, index) => {
+          const isCurrent = experience.endDate === "present";
+
+          return (
           <motion.div
             key={experience.id}
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="relative pb-12 pl-8 last:pb-0"
+            className="relative pb-12 pl-0 last:pb-0 md:pl-8"
           >
-            <div className="absolute left-[2px] top-1.5 h-3 w-3 rounded-full bg-[#00ff9d] ring-2 ring-[#00ff9d]/20" />
+            <div
+              className={`absolute left-4 top-1.5 hidden h-3 w-3 -translate-x-1/2 rounded-full ring-2 md:block ${
+                isCurrent
+                  ? "bg-accent ring-accent/20"
+                  : "bg-border ring-border/40"
+              }`}
+            />
 
-            <p className="text-2xl font-semibold text-[#00ff9d]">
+            <p
+              className={`text-xl font-semibold sm:text-2xl ${
+                isCurrent ? "text-accent" : "text-text"
+              }`}
+            >
               {experience.company}
             </p>
-            <p className="text-xl font-medium text-[#e2e2e2]">{experience.role}</p>
-            <p className="text-lg text-[#888888]">
+            <p className="text-lg font-medium text-[#e2e2e2] sm:text-xl">{experience.role}</p>
+            <p className="break-words text-base text-[#888888] sm:text-lg">
               {experience.startDate} – {experience.endDate} · {experience.location}
             </p>
 
@@ -119,7 +136,8 @@ export default function Experience() {
               ))}
             </ul>
           </motion.div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

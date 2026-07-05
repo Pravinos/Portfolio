@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk } from "next/font/google";
 import { ConsentProvider } from "@/components/ConsentProvider";
+import KeyboardShortcuts from "@/components/KeyboardShortcuts";
+import StatusBar from "@/components/StatusBar";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -60,6 +62,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#0a0a0a",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -70,10 +73,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`bg-[#0a0a0a] ${spaceGrotesk.variable}`}>
       <body
-        className={`${spaceGrotesk.className} bg-[#0a0a0a] text-[#e2e2e2] antialiased`}
+        className={`${spaceGrotesk.className} overflow-x-hidden bg-[#0a0a0a] text-[#e2e2e2] antialiased`}
       >
         <ConsentProvider gaId={process.env.NEXT_PUBLIC_GA_ID}>
           {children}
+          <KeyboardShortcuts />
+          <StatusBar />
         </ConsentProvider>
       </body>
     </html>

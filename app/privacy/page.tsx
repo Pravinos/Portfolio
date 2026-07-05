@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CookiePreferencesButton } from "@/components/CookiePreferencesButton";
+import { TypingHeader } from "@/components/TypingHeader";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Pravinos Thomas",
+  title: "Privacy Policy - Pravinos Thomas",
   description:
     "Privacy policy for portfolio.prav1nos.me, including Google Analytics and your data rights under GDPR.",
   robots: {
@@ -17,12 +18,15 @@ export default function PrivacyPage() {
     <main className="mx-auto max-w-3xl px-4 py-20 pb-32">
       <Link
         href="/"
-        className="font-mono text-sm text-[#888888] transition-colors hover:text-[#00ff9d]"
+        className="terminal-interactive inline-flex items-center font-mono text-sm text-muted transition-colors duration-200 hover:text-accent"
       >
         ← back to portfolio
       </Link>
 
-      <p className="mt-8 font-mono text-lg text-[#888888]">// privacy</p>
+      <TypingHeader
+        text="// privacy"
+        className="mt-8 font-mono text-lg text-[#888888]"
+      />
       <h1 className="mt-2 text-4xl font-bold text-[#e2e2e2] md:text-5xl">
         Privacy Policy
       </h1>
@@ -38,7 +42,7 @@ export default function PrivacyPage() {
             For privacy-related requests, contact{" "}
             <a
               href="mailto:tpravinos99@gmail.com"
-              className="text-[#00ff9d] underline underline-offset-2"
+              className="terminal-interactive inline-flex items-center text-accent underline underline-offset-2 transition-colors duration-200 hover:text-accent-bright"
             >
               tpravinos99@gmail.com
             </a>
@@ -111,7 +115,7 @@ export default function PrivacyPage() {
               href="https://policies.google.com/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#00ff9d] underline underline-offset-2"
+              className="terminal-interactive inline-flex items-center text-accent underline underline-offset-2 transition-colors duration-200 hover:text-accent-bright"
             >
               Google&apos;s Privacy Policy
             </a>
@@ -139,7 +143,7 @@ export default function PrivacyPage() {
               _ga
             </code>{" "}
             to distinguish visits. You can withdraw consent at any time using
-            the button below — analytics will stop and your choice will be
+            the button below - analytics will stop and your choice will be
             updated.
           </p>
         </section>
@@ -160,7 +164,7 @@ export default function PrivacyPage() {
             To exercise these rights, email{" "}
             <a
               href="mailto:tpravinos99@gmail.com"
-              className="text-[#00ff9d] underline underline-offset-2"
+              className="terminal-interactive inline-flex items-center text-accent underline underline-offset-2 transition-colors duration-200 hover:text-accent-bright"
             >
               tpravinos99@gmail.com
             </a>
@@ -186,7 +190,7 @@ export default function PrivacyPage() {
           <p className="mt-3">
             You can accept or reject analytics cookies at any time:
           </p>
-          <CookiePreferencesButton className="mt-4 rounded border border-[#2a2a2a] bg-[#111111] px-4 py-2 font-mono text-xs text-[#e2e2e2] transition-colors hover:border-[#00ff9d]/50" />
+          <CookiePreferencesButton className="terminal-interactive mt-4 inline-flex items-center rounded border border-border bg-surface2 px-4 py-2 font-mono text-xs text-text transition-colors duration-200 hover:border-accent/50" />
         </section>
       </div>
     </main>

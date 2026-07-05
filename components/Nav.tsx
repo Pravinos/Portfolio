@@ -1,7 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useBootReady } from "@/components/BootSequence";
+import { NAV_SCROLL_OFFSET, scrollToSection } from "@/lib/scroll";
 
 const SECTION_IDS = [
   "hero",
@@ -12,6 +15,8 @@ const SECTION_IDS = [
   "certifications",
   "contact",
 ] as const;
+
+type SectionId = (typeof SECTION_IDS)[number];
 
 const NAV_LINKS = [
   { href: "#about", label: "about", sectionId: "about" },
@@ -30,33 +35,55 @@ const NAV_LINKS = [
   { href: "#contact", label: "contact", sectionId: "contact" },
 ] as const;
 
-const MOBILE_NAV_SECTIONS = new Set([
-  "about",
-  "experience",
-  "projects",
-  "contact",
-]);
+function isSectionId(value: string): value is SectionId {
+  return (SECTION_IDS as readonly string[]).includes(value);
+}
+
+function updateHash(sectionId: SectionId) {
+  if (sectionId === "hero") {
+    if (!window.location.hash) return;
+    history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}`,
+    );
+    return;
+  }
+
+  const nextHash = `#${sectionId}`;
+  if (window.location.hash === nextHash) return;
+  history.replaceState(null, "", nextHash);
+}
 
 export default function Nav() {
-  const [activeSection, setActiveSection] = useState("");
+  const bootReady = useBootReady();
+  const [activeSection, setActiveSection] = useState<SectionId | "">("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const initialHashHandled = useRef(false);
+  const clickScrollRef = useRef(false);
 
   useEffect(() => {
     const visibility = new Map<string, number>();
 
     const updateActiveSection = () => {
-      let bestId = "";
+      let bestId: SectionId | "" = "";
       let bestRatio = 0;
 
       for (const id of SECTION_IDS) {
         const ratio = visibility.get(id) ?? 0;
-        if (ratio >= 0.5 && ratio > bestRatio) {
+        if (ratio > bestRatio) {
           bestRatio = ratio;
           bestId = id;
         }
       }
 
+      if (!bestId) return;
+
       setActiveSection(bestId);
+
+      if (!clickScrollRef.current) {
+        updateHash(bestId);
+      }
     };
 
     const observers = SECTION_IDS.map((id) => {
@@ -65,10 +92,16 @@ export default function Nav() {
 
       const observer = new IntersectionObserver(
         ([entry]) => {
-          visibility.set(id, entry?.isIntersecting ? entry.intersectionRatio : 0);
+          visibility.set(
+            id,
+            entry?.isIntersecting ? entry.intersectionRatio : 0,
+          );
           updateActiveSection();
         },
-        { threshold: [0, 0.25, 0.5, 0.75, 1] },
+        {
+          rootMargin: `-${NAV_SCROLL_OFFSET}px 0px -55% 0px`,
+          threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
+        },
       );
 
       observer.observe(element);
@@ -78,11 +111,45 @@ export default function Nav() {
     return () => observers.forEach((observer) => observer.disconnect());
   }, []);
 
-  const linkClassName = (sectionId: string) =>
-    `font-mono text-lg transition-colors ${
+  useEffect(() => {
+    if (!bootReady || initialHashHandled.current) return;
+
+    const hash = window.location.hash.replace("#", "");
+    if (!hash || !isSectionId(hash)) return;
+
+    initialHashHandled.current = true;
+    clickScrollRef.current = true;
+
+    const timer = window.setTimeout(() => {
+      scrollToSection(hash);
+      setActiveSection(hash);
+      clickScrollRef.current = false;
+    }, 100);
+
+    return () => window.clearTimeout(timer);
+  }, [bootReady]);
+
+  const handleNavClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: SectionId,
+  ) => {
+    event.preventDefault();
+    clickScrollRef.current = true;
+    scrollToSection(sectionId);
+    setActiveSection(sectionId);
+    updateHash(sectionId);
+    setMenuOpen(false);
+
+    window.setTimeout(() => {
+      clickScrollRef.current = false;
+    }, 800);
+  };
+
+  const linkClassName = (sectionId: SectionId) =>
+    `inline-flex items-center font-mono text-lg transition-colors duration-200 ${
       activeSection === sectionId
-        ? "text-[#00ff9d]"
-        : "text-[#888888] hover:text-[#00ff9d]"
+        ? "text-accent underline decoration-accent/60 underline-offset-4"
+        : "text-muted hover:text-accent"
     }`;
 
   return (
@@ -95,7 +162,12 @@ export default function Nav() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <a
           href="#hero"
-          className="font-mono text-lg text-[#00ff9d] transition-opacity hover:opacity-80"
+          onClick={(event) => handleNavClick(event, "hero")}
+          className={`inline-flex items-center font-mono text-lg transition-colors duration-200 hover:text-accent-bright ${
+            activeSection === "hero"
+              ? "text-accent underline decoration-accent/60 underline-offset-4"
+              : "text-accent"
+          }`}
         >
           ~/thomas
         </a>
@@ -105,6 +177,7 @@ export default function Nav() {
             <a
               key={sectionId}
               href={href}
+              onClick={(event) => handleNavClick(event, sectionId)}
               className={linkClassName(sectionId)}
             >
               {label}
@@ -117,28 +190,28 @@ export default function Nav() {
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((open) => !open)}
-          className="flex flex-col justify-center gap-1.5 p-2 md:hidden"
+          className="terminal-interactive inline-flex h-10 w-10 items-center justify-center rounded text-muted transition-colors duration-200 hover:text-accent md:hidden"
         >
-          <span className="block h-0.5 w-6 bg-[#888888] transition-colors" />
-          <span className="block h-0.5 w-6 bg-[#888888] transition-colors" />
-          <span className="block h-0.5 w-6 bg-[#888888] transition-colors" />
+          {menuOpen ? (
+            <X className="h-5 w-5" aria-hidden="true" />
+          ) : (
+            <Menu className="h-5 w-5" aria-hidden="true" />
+          )}
         </button>
       </div>
 
       <div
         className={`overflow-hidden border-t border-[#2a2a2a] transition-all duration-300 ease-in-out md:hidden ${
-          menuOpen ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
+          menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="flex flex-col gap-4 px-4 py-4 sm:px-6">
-          {NAV_LINKS.filter(({ sectionId }) =>
-            MOBILE_NAV_SECTIONS.has(sectionId),
-          ).map(({ href, label, sectionId }) => (
+          {NAV_LINKS.map(({ href, label, sectionId }) => (
             <a
               key={sectionId}
               href={href}
+              onClick={(event) => handleNavClick(event, sectionId)}
               className={linkClassName(sectionId)}
-              onClick={() => setMenuOpen(false)}
             >
               {label}
             </a>

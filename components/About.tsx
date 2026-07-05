@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { TypingHeader } from "@/components/TypingHeader";
 
 const FACTS = [
   { key: "based in", value: "Thessaloniki, Greece" },
@@ -12,21 +13,21 @@ const FACTS = [
   { key: "stack", value: "Java · Python · Spring Boot · Next.js · LLMs" }
 ] as const;
 
-const LANGUAGE_BARS = [
-  { name: "Greek", width: "100%", barClass: "bg-green" },
-  { name: "English", width: "95%", barClass: "bg-blue" },
-  { name: "German", width: "40%", barClass: "bg-dim" },
+const LANGUAGES = [
+  { name: "English", level: "Full Professional Proficiency (ECPE C2)" },
+  { name: "Greek", level: "Native" },
+  { name: "German", level: "Limited Working Proficiency (Goethe B1)" },
 ] as const;
 
 const CURRENTLY = [
-  "completing military service — back at Deloitte, Aug 2026",
+  "completing military service - back at Deloitte, Aug 2026",
 ] as const;
 
 export function About() {
   return (
-    <div className="px-6 pt-24 pb-16 md:px-16">
+    <div className="section-shell pt-24">
       <div className="mx-auto max-w-5xl">
-        <p className="font-mono text-lg text-muted">// about</p>
+        <TypingHeader text="// about" className="font-mono text-lg text-muted" />
 
         <div className="mt-12 grid grid-cols-1 gap-16 md:grid-cols-2">
           <motion.div
@@ -60,8 +61,8 @@ export function About() {
             </div>
 
             <div className="mt-8">
-              <p className="font-mono text-[12px] uppercase tracking-[3px] text-green">
-                // currently
+              <p className="font-mono text-sm uppercase tracking-[3px] text-accent sm:text-[12px]">
+                <span className="cmd-prefix-sm-hidden">// </span>currently
               </p>
               <div className="mt-3 space-y-1">
                 {CURRENTLY.map((line) => (
@@ -80,14 +81,14 @@ export function About() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true, margin: "-80px" }}
           >
-            <p className="font-mono text-[12px] uppercase tracking-[3px] text-dim">
-              // at a glance
+            <p className="font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
+              <span className="cmd-prefix-sm-hidden">// </span>at a glance
             </p>
 
             <dl className="mt-6 flex flex-col gap-4">
               {FACTS.map(({ key, value }) => (
-                <div key={key} className="flex gap-4">
-                  <dt className="w-24 flex-shrink-0 font-mono text-[13px] text-dim">
+                <div key={key} className="flex flex-col gap-1 sm:flex-row sm:gap-4">
+                  <dt className="flex-shrink-0 font-mono text-sm text-dim sm:w-24">
                     {key}
                   </dt>
                   <dd className="text-lg text-text">{value}</dd>
@@ -96,22 +97,19 @@ export function About() {
             </dl>
 
             <div className="mt-10">
-              <p className="font-mono text-[12px] uppercase tracking-[3px] text-dim">
-                // languages
+              <p className="font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
+                <span className="cmd-prefix-sm-hidden">// </span>languages
               </p>
-              <div className="mt-4 space-y-3">
-                {LANGUAGE_BARS.map(({ name, width, barClass }) => (
-                  <div key={name}>
-                    <p className="font-mono text-base text-muted">{name}</p>
-                    <div className="relative mt-1 h-0.5 rounded-full bg-surface2">
-                      <div
-                        className={`absolute left-0 top-0 h-full rounded-full ${barClass}`}
-                        style={{ width }}
-                      />
-                    </div>
+              <dl className="mt-4 flex flex-col gap-3">
+                {LANGUAGES.map(({ name, level }) => (
+                  <div key={name} className="flex flex-col gap-1 sm:flex-row sm:gap-4">
+                    <dt className="flex-shrink-0 font-mono text-sm text-dim sm:w-20">
+                      {name}
+                    </dt>
+                    <dd className="text-lg text-text">{level}</dd>
                   </div>
                 ))}
-              </div>
+              </dl>
             </div>
           </motion.div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { TypingHeader } from "@/components/TypingHeader";
 import { trackEvent } from "@/lib/analytics";
 
 type ProjectData = {
@@ -54,7 +55,7 @@ const MAIN_PROJECTS: ProjectData[] = [
     id: "devtutor",
     name: "DevTutor AI",
     description:
-      "Local AI coding tutor for programming beginners. Runs entirely on-device via LM Studio — fully private, no internet required. Interactive lessons and code explanations powered by local inference.",
+      "Local AI coding tutor for programming beginners. Runs entirely on-device via LM Studio - fully private, no internet required. Interactive lessons and code explanations powered by local inference.",
     stack: ["Python", "Streamlit", "LM Studio", "Ollama"],
     github: "https://github.com/Pravinos/DevTutor-AI",
     featured: false,
@@ -63,7 +64,7 @@ const MAIN_PROJECTS: ProjectData[] = [
     id: "portfolio",
     name: "This site",
     description:
-      "Terminal-themed developer portfolio with an embedded AI chat widget powered by Groq. Ask it anything about my background — it answers from structured CV context streamed in real time.",
+      "Terminal-themed developer portfolio with an embedded AI chat widget powered by Groq. Ask it anything about my background - it answers from structured CV context streamed in real time.",
     stack: ["Next.js", "Groq", "llama-3.3-70b", "Tailwind", "Framer Motion"],
     github: "https://github.com/Pravinos/",
     featured: false,
@@ -116,16 +117,16 @@ function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       viewport={{ once: true }}
-      className={`rounded-lg border border-[#2a2a2a] bg-[#111111] transition-colors duration-300 hover:border-[#00ff9d]/50 hover:shadow-[0_0_20px_rgba(0,255,157,0.05)] ${featured ? "p-6" : compact ? "p-4" : "p-4"}`}
+      className={`w-full rounded-lg border border-border bg-surface2 transition-colors duration-200 hover:border-accent/50 hover:shadow-[0_0_20px_rgba(74,222,128,0.05)] ${featured ? "p-4 sm:p-6" : "p-4"}`}
     >
       {project.context && (
-        <p className="mb-2 font-mono text-[13px] text-dim">
+        <p className="mb-2 font-mono text-sm text-dim">
           ⊕ {project.context}
         </p>
       )}
 
       <div className="flex items-start justify-between gap-4">
-        <h3 className="text-2xl font-semibold text-[#e2e2e2]">{project.name}</h3>
+        <h3 className="text-xl font-semibold text-[#e2e2e2] sm:text-2xl">{project.name}</h3>
 
         <div className="flex shrink-0 items-center gap-3">
           <a
@@ -133,13 +134,31 @@ function ProjectCard({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${project.name} on GitHub`}
-            className="text-[#888888] transition-colors hover:text-[#00ff9d]"
+            className="inline-flex items-center text-muted transition-colors duration-200 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
             onClick={() =>
               trackEvent("click", "project", `project_${project.id}_github`)
             }
           >
             <GitHubIcon />
           </a>
+          {project.githubSecondary && (
+            <a
+              href={project.githubSecondary}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.name} ${project.githubSecondaryLabel ?? "secondary repo"} on GitHub`}
+              className="inline-flex items-center text-muted transition-colors duration-200 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+              onClick={() =>
+                trackEvent(
+                  "click",
+                  "project",
+                  `project_${project.id}_frontend_github`,
+                )
+              }
+            >
+              <GitHubIcon />
+            </a>
+          )}
         </div>
       </div>
 
@@ -155,42 +174,11 @@ function ProjectCard({
         {project.stack.map((tech) => (
           <span
             key={tech}
-            className="rounded border border-[#2a2a2a] bg-[#0a0a0a] px-2 py-0.5 font-mono text-base text-[#00ff9d]"
+            className="rounded border border-border bg-bg px-2 py-0.5 font-mono text-base text-accent"
           >
             {tech}
           </span>
         ))}
-      </div>
-
-      <div className="mt-3 flex flex-wrap items-center gap-3">
-        <a
-          href={project.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-mono text-[13px] text-green transition-colors hover:text-greenBright"
-          onClick={() =>
-            trackEvent("click", "project", `project_${project.id}_github`)
-          }
-        >
-          {project.githubSecondary ? "↗ backend repo" : "↗ view repo"}
-        </a>
-        {project.githubSecondary && project.githubSecondaryLabel && (
-          <a
-            href={project.githubSecondary}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-mono text-[13px] text-green transition-colors hover:text-greenBright"
-            onClick={() =>
-              trackEvent(
-                "click",
-                "project",
-                `project_${project.id}_frontend_github`
-              )
-            }
-          >
-            ↗ {project.githubSecondaryLabel}
-          </a>
-        )}
       </div>
     </motion.article>
   );
@@ -198,16 +186,19 @@ function ProjectCard({
 
 export default function Projects() {
   return (
-    <div className="mx-auto max-w-5xl px-4 pt-16 pb-24">
-      <p className="font-mono text-lg text-[#888888]">// projects</p>
-      <h2 className="mt-2 text-5xl font-bold text-[#e2e2e2]">
+    <div className="section-shell mx-auto max-w-5xl">
+      <TypingHeader
+        text="// projects"
+        className="font-mono text-lg text-[#888888]"
+      />
+      <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2] sm:text-5xl">
         Things I&apos;ve Built
       </h2>
 
       <div className="mt-12">
         <ProjectCard project={FEATURED_PROJECT} index={0} featured />
 
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-3">
           {GRID_PROJECTS.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index + 1} />
           ))}
@@ -216,8 +207,8 @@ export default function Projects() {
 
       <div className="mt-12 border-t border-border pt-10">
         <div className="mb-6 flex items-center gap-3">
-          <p className="font-mono text-[12px] uppercase tracking-[3px] text-dim">
-            // built during military service
+          <p className="font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
+            <span className="cmd-prefix-sm-hidden">// </span>built during military service
           </p>
           <div className="h-px flex-1 bg-border" />
         </div>

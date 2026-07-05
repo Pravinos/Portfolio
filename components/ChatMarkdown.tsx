@@ -14,7 +14,7 @@ const markdownComponents: Components = {
   ),
   li: ({ children }) => <li className="leading-relaxed">{children}</li>,
   strong: ({ children }) => (
-    <strong className="font-semibold text-[#00ff9d]">{children}</strong>
+    <strong className="font-semibold text-accent">{children}</strong>
   ),
   em: ({ children }) => <em className="italic text-[#888888]">{children}</em>,
   a: ({ href, children }) => (
@@ -22,7 +22,7 @@ const markdownComponents: Components = {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-[#0ea5e9] underline underline-offset-2 transition hover:text-[#00ff9d]"
+      className="terminal-interactive inline-flex items-center text-accent underline underline-offset-2 transition-colors duration-200 hover:text-accent-bright"
     >
       {children}
     </a>
@@ -32,14 +32,14 @@ const markdownComponents: Components = {
 
     if (isBlock) {
       return (
-        <code className="block overflow-x-auto rounded border border-[#2a2a2a] bg-[#0a0a0a] px-2 py-1.5 text-base text-[#00ff9d]">
+        <code className="block overflow-x-auto rounded border border-border bg-bg px-2 py-1.5 text-base text-accent">
           {children}
         </code>
       );
     }
 
     return (
-      <code className="rounded bg-[#0a0a0a] px-1 py-0.5 text-base text-[#00ff9d]">
+      <code className="rounded bg-bg px-1 py-0.5 text-base text-accent">
         {children}
       </code>
     );
@@ -57,7 +57,7 @@ const markdownComponents: Components = {
     <h3 className="mb-1 text-base font-semibold text-[#e2e2e2]">{children}</h3>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="mb-2 border-l-2 border-[#00ff9d]/40 pl-3 text-[#888888] last:mb-0">
+    <blockquote className="mb-2 border-l-2 border-accent/40 pl-3 text-[#888888] last:mb-0">
       {children}
     </blockquote>
   ),
