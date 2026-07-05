@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { ExternalLinkArrow } from "@/components/ExternalLinkArrow";
 import { trackEvent } from "@/lib/analytics";
 
 const TITLES = [
@@ -121,19 +122,21 @@ export default function Hero() {
             href="https://github.com/Pravinos/"
             target="_blank"
             rel="noopener noreferrer"
-            className="terminal-interactive inline-flex items-center border-none bg-transparent font-sans text-base text-muted transition-colors duration-200 hover:text-accent"
+            className="terminal-interactive inline-flex items-center gap-1 border-none bg-transparent font-sans text-base text-muted transition-colors duration-200 hover:text-accent"
             onClick={() => trackEvent("click", "cta", "hero_github")}
           >
-            github ↗
+            github
+            <ExternalLinkArrow />
           </a>
           <a
             href="https://www.linkedin.com/in/thomas-pravinos/"
             target="_blank"
             rel="noopener noreferrer"
-            className="terminal-interactive inline-flex items-center border-none bg-transparent font-sans text-base text-muted transition-colors duration-200 hover:text-accent"
+            className="terminal-interactive inline-flex items-center gap-1 border-none bg-transparent font-sans text-base text-muted transition-colors duration-200 hover:text-accent"
             onClick={() => trackEvent("click", "cta", "hero_linkedin")}
           >
-            linkedin ↗
+            linkedin
+            <ExternalLinkArrow />
           </a>
         </div>
       </div>

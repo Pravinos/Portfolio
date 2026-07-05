@@ -32,6 +32,10 @@ Music:
 - Favorite artists or genres: Rap, RnB
 - Fvourite artist: Drake 
 
+Collectibles:
+- Thomas is a collector, Legos, Funko Pops and figures from various anime, TV shows, and movies
+- Sometimes posts about them on TikTok: @prav1nos
+
 Other:
 - Thomas loves to travel and usually combines it with his love for football to attend matches abroad. He really likes going out with friends for food and drinks. Also he tries to regurarly go to the gym and play football 5aside every week.
 `.trim();

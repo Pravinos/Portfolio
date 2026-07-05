@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ExternalLinkArrow } from "@/components/ExternalLinkArrow";
 import { TypingHeader } from "@/components/TypingHeader";
 
 type Certification = {
@@ -123,9 +124,10 @@ export function Certifications() {
                   href={cert.credentialUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="terminal-interactive mt-3 inline-flex items-center font-mono text-sm text-accent transition-colors duration-200 hover:text-accent-bright"
+                  className="terminal-interactive mt-3 inline-flex items-center gap-1 font-mono text-sm text-accent transition-colors duration-200 hover:text-accent-bright"
                 >
-                  ↗ verify credential
+                  <ExternalLinkArrow />
+                  verify credential
                 </a>
               )}
             </motion.article>

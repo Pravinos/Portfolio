@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ExternalLinkArrow } from "@/components/ExternalLinkArrow";
 import { TypingHeader } from "@/components/TypingHeader";
 
 const THESIS_TAGS = [
@@ -159,7 +160,8 @@ export function Education() {
                 rel="noopener noreferrer"
                 className="terminal-interactive inline-flex items-center gap-1 font-mono text-sm text-accent transition-colors duration-200 hover:text-accent-bright"
               >
-                ↗ GitHub Repository
+                <ExternalLinkArrow />
+                GitHub Repository
               </a>
               <a
                 href="https://ikee.lib.auth.gr/record/356385"
@@ -167,7 +169,8 @@ export function Education() {
                 rel="noopener noreferrer"
                 className="terminal-interactive inline-flex items-center gap-1 font-mono text-sm text-accent transition-colors duration-200 hover:text-accent-bright"
               >
-                ↗ IKEE - AUTH Library
+                <ExternalLinkArrow />
+                IKEE - AUTH Library
               </a>
             </div>
           </div>
@@ -222,9 +225,10 @@ export function Education() {
                   href={item.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="terminal-interactive mt-2 inline-flex items-center font-mono text-sm text-accent transition-colors duration-200 hover:text-accent-bright"
+                  className="terminal-interactive mt-2 inline-flex items-center gap-1 font-mono text-sm text-accent transition-colors duration-200 hover:text-accent-bright"
                 >
-                  ↗ view repo
+                  <ExternalLinkArrow />
+                  view repo
                 </a>
               </motion.div>
             ))}
