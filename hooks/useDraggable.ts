@@ -5,8 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 type Position = { x: number; y: number };
 type Size = { width: number; height: number };
 
-const DEFAULT_SIZE: Size = { width: 400, height: 520 };
-const MIN_SIZE: Size = { width: 280, height: 220 };
+const DEFAULT_SIZE: Size = { width: 480, height: 640 };
+const MIN_SIZE: Size = { width: 320, height: 280 };
 const VIEWPORT_MARGIN = 12;
 
 function clamp(value: number, min: number, max: number) {
@@ -45,6 +45,13 @@ export function useDraggableWindow(
       ),
     });
   }, [defaultSize.height, defaultSize.width]);
+
+  const resetWindow = useCallback(() => {
+    setSize(defaultSize);
+    setPosition(null);
+    setIsDragging(false);
+    setIsResizing(false);
+  }, [defaultSize]);
 
   useEffect(() => {
     if (isVisible && position === null) {
@@ -142,5 +149,6 @@ export function useDraggableWindow(
     isResizing,
     onDragStart,
     onResizeStart,
+    resetWindow,
   };
 }

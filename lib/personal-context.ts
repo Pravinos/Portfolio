@@ -10,24 +10,28 @@ Football:
 - Favorite team: PAOK FC
 - All time favorite player: Cristiano Ronaldo
 - Also follows: Real Madrid, Manchester United, Milan
+- Extra: Thomas playes casual football with friends and attends PAOK FC matches.
 
 Anime:
 - Favorites: Attack on Titan, Demon Slayer, Solo Leveling, Jujutsu Kaisen
+- Fvourite character: Eren Yeager
 - Currently watching: Chainsaw Man
 
 TV series:
 - Favorites: Game of Thrones, Breaking Bad, The Office, Big Bang Theory, Rick and Morty
-- Currently watching: [add current series, or "none right now"]
+- Currently watching: From
 
 Movies:
 - Favorites: Lord of the Rings Trilogy, Interstellar, Dune Movies
 
 Video games:
-- Favorites: Fifa, League of Legends, PUBG, Clair Obscure: Expedition 33
+- Favorites: Fifa, League of Legends, PUBG, Clair Obscure: Expedition 33, Hades
+- Most played game: Fifa 
 
 Music:
 - Favorite artists or genres: Rap, RnB
+- Fvourite artist: Drake 
 
 Other:
-- [add anything else — books, food, travel spots, fun facts, etc.]
+- Thomas loves to travel and usually combines it with his love for football to attend matches abroad. He really likes going out with friends for food and drinks. Also he tries to regurarly go to the gym and play football 5aside every week.
 `.trim();

@@ -28,6 +28,9 @@ export function About() {
     <div className="section-shell pt-24">
       <div className="mx-auto max-w-5xl">
         <TypingHeader text="// about" className="font-mono text-lg text-muted" />
+        <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2] sm:text-5xl">
+          The Story So Far
+        </h2>
 
         <div className="mt-12 grid grid-cols-1 gap-16 md:grid-cols-2">
           <motion.div

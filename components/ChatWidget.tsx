@@ -17,8 +17,10 @@ const STARTER_QUESTIONS = [
   "Any hobbies outside work?",
 ];
 
-const TITLE_BAR_HEIGHT = 36;
+const TITLE_BAR_HEIGHT = 40;
 const MOBILE_BREAKPOINT = 768;
+const CHAT_WIDGET_DEFAULT_SIZE = { width: 480, height: 640 } as const;
+const CHAT_WIDGET_MIN_SIZE = { width: 320, height: 280 } as const;
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
@@ -44,7 +46,7 @@ function getMessageText(message: UIMessage): string {
 
 function TerminalPromptIcon() {
   return (
-    <span className="font-mono text-base font-bold leading-none" aria-hidden="true">
+    <span className="font-mono text-lg font-bold leading-none" aria-hidden="true">
       &gt;_
     </span>
   );
@@ -107,7 +109,11 @@ export default function ChatWidget() {
     isResizing,
     onDragStart,
     onResizeStart,
-  } = useDraggableWindow(isOpen && useDesktopWindow);
+    resetWindow,
+  } = useDraggableWindow(isOpen && useDesktopWindow, {
+    defaultSize: CHAT_WIDGET_DEFAULT_SIZE,
+    minSize: CHAT_WIDGET_MIN_SIZE,
+  });
 
   useEffect(() => {
     if (isWindowVisible) {
@@ -167,6 +173,7 @@ export default function ChatWidget() {
   const closeChat = () => {
     setIsOpen(false);
     setIsMinimized(false);
+    resetWindow();
   };
 
   const minimizeChat = () => {
@@ -226,14 +233,14 @@ export default function ChatWidget() {
                   ? {
                       left: position?.x,
                       top: position?.y,
-                      width: size.width,
-                      height: isMinimized ? TITLE_BAR_HEIGHT : size.height,
+                      width: `${size.width}px`,
+                      height: isMinimized ? `${TITLE_BAR_HEIGHT}px` : `${size.height}px`,
                     }
                   : undefined
               }
               className={`fixed z-[90] flex flex-col overflow-hidden bg-[#0d0d0d] shadow-[0_16px_48px_rgba(0,0,0,0.6)] ${
                 isMobile
-                  ? "inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] h-[60vh] max-h-[calc(100dvh-3.5rem-env(safe-area-inset-bottom,0px)-4rem)] rounded-t-xl border border-b-0 border-[#2a2a2a]"
+                  ? "inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] h-[70vh] max-h-[calc(100dvh-3.5rem-env(safe-area-inset-bottom,0px)-4rem)] rounded-t-xl border border-b-0 border-[#2a2a2a]"
                   : "rounded-lg border border-[#2a2a2a]"
               } ${isDragging || isResizing ? "select-none" : ""} ${
                 isMinimized && useDesktopWindow
@@ -243,7 +250,7 @@ export default function ChatWidget() {
             >
             <div
               onMouseDown={useDesktopWindow ? onDragStart : undefined}
-              className={`flex shrink-0 items-center gap-3 border-b border-[#2a2a2a] bg-[#161616] px-3 py-2 ${
+              className={`flex shrink-0 items-center gap-3 border-b border-[#2a2a2a] bg-[#161616] px-4 py-2.5 ${
                 useDesktopWindow
                   ? `cursor-grab active:cursor-grabbing ${isDragging ? "cursor-grabbing" : ""}`
                   : ""
@@ -263,7 +270,7 @@ export default function ChatWidget() {
               <button
                 type="button"
                 onClick={() => isMinimized && setIsMinimized(false)}
-                className={`min-w-0 flex-1 truncate text-left font-mono text-sm text-muted sm:text-xs ${
+                className={`min-w-0 flex-1 truncate text-left font-mono text-base text-muted sm:text-sm ${
                   isMinimized
                     ? "terminal-interactive cursor-pointer transition-colors duration-200 hover:text-text"
                     : ""
@@ -283,7 +290,7 @@ export default function ChatWidget() {
                 type="button"
                 onClick={closeChat}
                 aria-label="Close chat window"
-                className="terminal-interactive inline-flex items-center font-mono text-sm leading-none text-[#555555] transition-colors duration-200 hover:text-text"
+                className="terminal-interactive inline-flex items-center font-mono text-base leading-none text-[#555555] transition-colors duration-200 hover:text-text"
               >
                 ×
               </button>
@@ -291,7 +298,7 @@ export default function ChatWidget() {
 
             {!isMinimized && (
               <>
-                <div className="chat-scroll flex-1 space-y-3 overflow-y-auto px-3 py-3 font-mono text-sm">
+                <div className="chat-scroll flex-1 space-y-3 overflow-y-auto px-4 py-4 font-mono text-base">
                   {messages.length === 0 && (
                     <p className="text-[#555555]">
                       <span className="text-accent">#</span> Ask about my work,
@@ -340,13 +347,13 @@ export default function ChatWidget() {
                 </div>
 
                 {messages.length === 0 && (
-                  <div className="flex flex-wrap gap-2 border-t border-[#2a2a2a] px-3 py-2">
+                  <div className="flex flex-wrap gap-2 border-t border-[#2a2a2a] px-4 py-3">
                     {STARTER_QUESTIONS.map((question) => (
                       <button
                         key={question}
                         type="button"
                         onClick={() => handleStarterQuestion(question)}
-                        className="terminal-interactive inline-flex items-center rounded border border-border bg-surface2 px-2 py-1 font-mono text-sm text-muted transition-colors duration-200 hover:border-accent/50 hover:text-accent sm:text-xs"
+                        className="terminal-interactive inline-flex items-center rounded border border-border bg-surface2 px-2 py-1 font-mono text-base text-muted transition-colors duration-200 hover:border-accent/50 hover:text-accent sm:text-sm"
                       >
                         {question}
                       </button>
@@ -355,16 +362,16 @@ export default function ChatWidget() {
                 )}
 
                 {error && (
-                  <div className="mx-3 mb-2 rounded border border-red-500/30 bg-red-500/10 px-3 py-2 font-mono text-sm text-red-400 sm:text-xs">
+                  <div className="mx-3 mb-2 rounded border border-red-500/30 bg-red-500/10 px-3 py-2 font-mono text-base text-red-400 sm:text-sm">
                     err: request failed - try again
                   </div>
                 )}
 
                 <form
                   onSubmit={handleSubmit}
-                  className="flex shrink-0 items-center gap-2 border-t border-[#2a2a2a] bg-[#111111] px-3 py-2.5"
+                  className="flex shrink-0 items-center gap-2 border-t border-[#2a2a2a] bg-[#111111] px-4 py-3"
                 >
-                  <span className="cmd-prefix-sm-hidden shrink-0 font-mono text-sm text-accent">
+                  <span className="cmd-prefix-sm-hidden shrink-0 font-mono text-base text-accent">
                     $
                   </span>
                   <input
@@ -374,12 +381,12 @@ export default function ChatWidget() {
                     onKeyDown={handleKeyDown}
                     placeholder="ask about my experience..."
                     disabled={isLoading}
-                    className="min-w-0 flex-1 bg-transparent font-mono text-sm text-[#e2e2e2] placeholder-[#444444] focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 disabled:opacity-50"
+                    className="min-w-0 flex-1 bg-transparent font-mono text-base text-[#e2e2e2] placeholder-[#444444] focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2 disabled:opacity-50"
                   />
                   <button
                     type="submit"
                     disabled={isLoading || !input.trim()}
-                    className="terminal-interactive inline-flex shrink-0 items-center rounded border border-accent/40 bg-accent/10 px-2.5 py-1 font-mono text-sm text-accent transition-colors duration-200 hover:bg-accent/20 disabled:opacity-40 sm:text-xs"
+                    className="terminal-interactive inline-flex shrink-0 items-center rounded border border-accent/40 bg-accent/10 px-2.5 py-1 font-mono text-base text-accent transition-colors duration-200 hover:bg-accent/20 disabled:opacity-40 sm:text-sm"
                   >
                     enter
                   </button>
@@ -413,7 +420,7 @@ export default function ChatWidget() {
         aria-label={isOpen && !isMinimized ? "Close chat" : "Ask AI"}
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.97 }}
-        className={`ask-ai-pulse terminal-interactive fixed bottom-24 right-6 z-[45] hidden items-center gap-2 rounded-full border border-accent/30 bg-surface2 px-4 py-3 font-mono text-sm text-accent transition-colors duration-200 hover:border-accent/60 hover:bg-surface-elevated md:flex ${
+        className={`ask-ai-pulse terminal-interactive fixed bottom-24 right-6 z-[45] hidden items-center gap-2 rounded-full border border-accent/30 bg-surface2 px-5 py-3.5 font-mono text-base text-accent transition-colors duration-200 hover:border-accent/60 hover:bg-surface-elevated md:flex ${
           isOpen && !isMinimized ? "opacity-80" : ""
         }`}
       >

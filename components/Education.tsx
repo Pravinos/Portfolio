@@ -76,6 +76,9 @@ export function Education() {
           text="// education & research"
           className="font-mono text-lg text-muted"
         />
+        <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2] sm:text-5xl">
+          From Lectures to Thesis
+        </h2>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}

@@ -85,13 +85,17 @@ const EXPERIENCES: ExperienceData[] = [
 
 export default function Experience() {
   return (
-    <div className="section-shell mx-auto max-w-3xl">
-      <TypingHeader
-        text="// experience"
-        className="font-mono text-lg text-[#888888]"
-      />
+    <div className="section-shell">
+      <div className="mx-auto max-w-5xl">
+        <TypingHeader
+          text="// experience"
+          className="font-mono text-lg text-[#888888]"
+        />
+        <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2] sm:text-5xl">
+          Teams I&apos;ve Joined
+        </h2>
 
-      <div className="relative mt-10">
+        <div className="relative mx-auto mt-12 max-w-3xl">
         <div className="absolute bottom-0 left-4 top-0 hidden w-0.5 bg-[#2a2a2a] md:block" />
 
         {EXPERIENCES.map((experience, index) => {
@@ -138,6 +142,7 @@ export default function Experience() {
           </motion.div>
           );
         })}
+        </div>
       </div>
     </div>
   );

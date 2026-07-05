@@ -70,7 +70,7 @@ type ChatMarkdownProps = {
 
 export default function ChatMarkdown({ content }: ChatMarkdownProps) {
   return (
-    <div className="chat-markdown text-base leading-relaxed">
+    <div className="chat-markdown text-lg leading-relaxed">
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
         {content}
       </ReactMarkdown>

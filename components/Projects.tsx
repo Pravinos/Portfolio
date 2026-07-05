@@ -11,6 +11,7 @@ type ProjectData = {
   detail?: string;
   stack: string[];
   github: string;
+  githubLabel?: string;
   githubSecondary?: string;
   githubSecondaryLabel?: string;
   featured?: boolean;
@@ -27,8 +28,9 @@ const MAIN_PROJECTS: ProjectData[] = [
       "Split across vault-api and vault-frontend: the Java/Spring Boot backend covers auth, accounts, transactions, categories, and goal tracking with Spring Security and JWT; the Next.js client consumes REST endpoints for balances, trends, and goal progress. Designed with clear API boundaries, relational data modelling, and a deployable backend/frontend split typical of real SaaS products.",
     stack: ["Spring Boot", "Java", "Next.js", "TypeScript", "PostgreSQL", "JWT"],
     github: "https://github.com/Pravinos/vault-api",
+    githubLabel: "api",
     githubSecondary: "https://github.com/Pravinos/vault-frontend",
-    githubSecondaryLabel: "frontend repo",
+    githubSecondaryLabel: "frontend",
     featured: true,
   },
   {
@@ -100,6 +102,32 @@ function GitHubIcon() {
   );
 }
 
+function RepoLink({
+  href,
+  label,
+  ariaLabel,
+  onClick,
+}: {
+  href: string;
+  label?: string;
+  ariaLabel: string;
+  onClick: () => void;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={ariaLabel}
+      className="inline-flex items-center gap-1.5 rounded border border-transparent px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide text-muted transition-colors duration-200 hover:border-accent/30 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+      onClick={onClick}
+    >
+      <GitHubIcon />
+      {label && <span>{label}</span>}
+    </a>
+  );
+}
+
 function ProjectCard({
   project,
   index,
@@ -117,7 +145,11 @@ function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       viewport={{ once: true }}
-      className={`w-full rounded-lg border border-border bg-surface2 transition-colors duration-200 hover:border-accent/50 hover:shadow-[0_0_20px_rgba(74,222,128,0.05)] ${featured ? "p-4 sm:p-6" : "p-4"}`}
+      className={`w-full rounded-lg border bg-surface2 transition-colors duration-200 hover:border-accent/50 hover:shadow-[0_0_20px_rgba(74,222,128,0.05)] ${
+        featured
+          ? "border-accent/40 p-4 shadow-[0_0_24px_rgba(74,222,128,0.08)] sm:p-6"
+          : "border-border p-4"
+      }`}
     >
       {project.context && (
         <p className="mb-2 font-mono text-sm text-dim">
@@ -128,26 +160,20 @@ function ProjectCard({
       <div className="flex items-start justify-between gap-4">
         <h3 className="text-xl font-semibold text-[#e2e2e2] sm:text-2xl">{project.name}</h3>
 
-        <div className="flex shrink-0 items-center gap-3">
-          <a
+        <div className="flex shrink-0 items-center gap-2">
+          <RepoLink
             href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${project.name} on GitHub`}
-            className="inline-flex items-center text-muted transition-colors duration-200 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+            label={project.githubSecondary ? (project.githubLabel ?? "api") : undefined}
+            ariaLabel={`${project.name}${project.githubLabel ? ` ${project.githubLabel}` : ""} on GitHub`}
             onClick={() =>
               trackEvent("click", "project", `project_${project.id}_github`)
             }
-          >
-            <GitHubIcon />
-          </a>
+          />
           {project.githubSecondary && (
-            <a
+            <RepoLink
               href={project.githubSecondary}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${project.name} ${project.githubSecondaryLabel ?? "secondary repo"} on GitHub`}
-              className="inline-flex items-center text-muted transition-colors duration-200 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+              label={project.githubSecondaryLabel ?? "frontend"}
+              ariaLabel={`${project.name} ${project.githubSecondaryLabel ?? "frontend"} on GitHub`}
               onClick={() =>
                 trackEvent(
                   "click",
@@ -155,9 +181,7 @@ function ProjectCard({
                   `project_${project.id}_frontend_github`,
                 )
               }
-            >
-              <GitHubIcon />
-            </a>
+            />
           )}
         </div>
       </div>
@@ -186,34 +210,36 @@ function ProjectCard({
 
 export default function Projects() {
   return (
-    <div className="section-shell mx-auto max-w-5xl">
-      <TypingHeader
-        text="// projects"
-        className="font-mono text-lg text-[#888888]"
-      />
-      <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2] sm:text-5xl">
-        Things I&apos;ve Built
-      </h2>
+    <div className="section-shell">
+      <div className="mx-auto max-w-5xl">
+        <TypingHeader
+          text="// projects"
+          className="font-mono text-lg text-[#888888]"
+        />
+        <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2] sm:text-5xl">
+          Things I&apos;ve Built
+        </h2>
 
-      <div className="mt-12">
-        <ProjectCard project={FEATURED_PROJECT} index={0} featured />
+        <div className="mx-auto mt-12 max-w-5xl">
+          <ProjectCard project={FEATURED_PROJECT} index={0} featured />
 
-        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-3">
-          {GRID_PROJECTS.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index + 1} />
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-12 border-t border-border pt-10">
-        <div className="mb-6 flex items-center gap-3">
-          <p className="font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
-            <span className="cmd-prefix-sm-hidden">// </span>built during military service
-          </p>
-          <div className="h-px flex-1 bg-border" />
+          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {GRID_PROJECTS.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index + 1} />
+            ))}
+          </div>
         </div>
 
-        <ProjectCard project={MILITARY_PROJECT} index={0} compact />
+        <div className="mx-auto mt-12 max-w-5xl border-t border-border pt-10">
+          <div className="mb-6 flex items-center gap-3">
+            <p className="font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
+              <span className="cmd-prefix-sm-hidden">// </span>built during military service
+            </p>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
+          <ProjectCard project={MILITARY_PROJECT} index={0} compact />
+        </div>
       </div>
     </div>
   );
