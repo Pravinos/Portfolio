@@ -5,9 +5,9 @@ import { PORTFOLIO_EVENTS } from "@/lib/portfolio-events";
 
 /** Terminal-style status values - aligned with cv-context / Experience / About */
 const PROFILE_STATUS = {
-  status: "military_service",
-  location: "veroia, gr",
-  next: "deloitte_aug_2026",
+  status: "back_at_deloitte",
+  location: "thessaloniki, gr",
+  next: "building_products",
   uptime: "26y",
 } as const;
 

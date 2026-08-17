@@ -7,11 +7,10 @@ import Projects from "@/components/Projects";
 import { Certifications } from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import ChatWidget from "@/components/ChatWidget";
-import BootSequence from "@/components/BootSequence";
 
 export default function Home() {
   return (
-    <BootSequence>
+    <>
       <Nav />
       <main className="page-content">
         <section id="hero">
@@ -37,6 +36,6 @@ export default function Home() {
         </section>
       </main>
       <ChatWidget />
-    </BootSequence>
+    </>
   );
 }

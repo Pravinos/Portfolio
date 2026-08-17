@@ -2,7 +2,7 @@ import { PERSONAL_CONTEXT } from "./personal-context";
 
 export const CV_CONTEXT = `
 == ABOUT ==
-Pravinos Thomas is a software engineer based in Thessaloniki, Greece. He builds backend systems, AI-powered developer tools, and full-stack applications - mostly with Java, Python, Spring Boot, and React. He works at Deloitte's Engineering, AI & Data department and is currently completing mandatory Hellenic Army service, returning to Deloitte in August 2026. He is 26 years old.
+Pravinos Thomas is a software engineer based in Thessaloniki, Greece. He builds backend systems, AI-powered developer tools, and full-stack applications - mostly with Java, Python, Spring Boot, and React. He is back at Deloitte's Engineering, AI & Data department in Thessaloniki after completing mandatory Hellenic Army service. He is 26 years old.
 
 Contact:
 - Email: tpravinos99@gmail.com
@@ -16,10 +16,10 @@ At a glance:
 - Stack: Java · Python · Spring Boot · Next.js · LLMs
 
 Currently:
-- Completing military service - back at Deloitte, Aug 2026
+- Back at Deloitte in Thessaloniki, Greece
 
 == BIOGRAPHY ==
-Pravinos grew up in Alexandria, a small city in northern Greece, and moved to Thessaloniki at 18 to study Electrical and Computer Engineering at AUTH. Six years later he finished a thesis on nanosatellite fault detection and landed at Deloitte building AI tools and backend systems. He is 26, still based in Thessaloniki, and right now finishing military service in the Hellenic Army before heading back to Deloitte in August 2026.
+Pravinos grew up in Alexandria, a small city in northern Greece, and moved to Thessaloniki at 18 to study Electrical and Computer Engineering at AUTH. Six years later he finished a thesis on nanosatellite fault detection, joined Deloitte, and built AI tools and backend systems. He is 26, based in Thessaloniki, and after completing military service he is back at Deloitte working in Greece.
 
 Away from screens he follows football more closely than is strictly necessary, plays video games when he can, and keeps a watchlist that grows faster than he can finish it. He travels when the opportunity comes up, but most of the time he'd rather be with friends and family.
 
@@ -45,7 +45,7 @@ Key projects:
 
 Hellenic Army - Research & Informatics Soldier
 Veroia, Greece | Nov 2025 – Aug 2026
-Mandatory military service assigned to Research & Informatics (Special Duties). Applied technical background to support IT infrastructure and internal digital workflows.
+Completed mandatory military service in Research & Informatics (Special Duties), applying technical skills to support IT infrastructure and internal digital workflows.
 - IT systems support, data management, and internal workflow automation for military operations
 - Technical documentation, process standardisation, and troubleshooting
 - Built FireRiskMaps - a fire risk visualisation tool deployed for real internal use within the unit (see Projects)
@@ -165,7 +165,7 @@ Aristotle University of Thessaloniki (AUTH) | Oct 2018 – Sep 2024 | Grade: 7.0
 - Self-hosts tools on a home server and builds side projects to explore technologies outside day-to-day work
 - Follows football, plays video games, and enjoys films; values time with friends and family
 - Open to backend engineer, AI engineer, and full-stack roles
-- Currently completing military service and returning to Deloitte in August 2026
+- Back at Deloitte in Thessaloniki after completing military service
 - Open to collaboration - contact via tpravinos99@gmail.com
 
 ${PERSONAL_CONTEXT}

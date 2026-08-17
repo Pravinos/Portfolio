@@ -20,7 +20,7 @@ const LANGUAGES = [
 ] as const;
 
 const CURRENTLY = [
-  "completing military service - back at Deloitte, Aug 2026",
+  "back at Deloitte in Thessaloniki, Greece",
 ] as const;
 
 export function About() {
@@ -43,11 +43,11 @@ export function About() {
               <p className="font-sans text-lg leading-relaxed text-muted">
                 I grew up in Alexandria, a small city in northern Greece, and
                 moved to Thessaloniki at 18 to study Electrical and Computer
-                Engineering at AUTH. Six years later I&apos;d finished a thesis
-                on nanosatellite fault detection and landed at Deloitte building
-                AI tools and backend systems. I&apos;m 26, still here, and right
-                now finishing military service in the Hellenic Army before
-                heading back to Deloitte in August 2026.
+                Engineering at AUTH. Six years later I&apos;d finished a thesis on
+                nanosatellite fault detection, joined Deloitte, and built AI
+                tools and backend systems. I&apos;m 26, based in Thessaloniki, and
+                after finishing my military service I&apos;m back at Deloitte,
+                working in Greece.
               </p>
               <p className="font-sans text-lg leading-relaxed text-muted">
                 Away from screens I follow football more closely than is

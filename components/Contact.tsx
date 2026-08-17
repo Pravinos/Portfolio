@@ -105,9 +105,9 @@ export default function Contact() {
             }
           >
             <span className="text-[#888888]">
-              <span className="cmd-prefix-sm-hidden">$ </span>open{" "}
+              <span className="cmd-prefix-sm-hidden">$ </span>open
             </span>
-            <span className="break-all text-accent sm:break-normal">{link.display}</span>
+            <span className="ml-2 break-all text-accent sm:break-normal">{link.display}</span>
           </motion.a>
         ))}
       </div>

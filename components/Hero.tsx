@@ -98,9 +98,9 @@ export default function Hero() {
         >
           Software engineer based in Thessaloniki, Greece. I build backend
           systems, AI-powered developer tools, and full-stack applications,
-          mostly with Java, Python, Spring Boot, and React. Currently at
-          Deloitte&apos;s Engineering, AI &amp; Data team, returning August
-          2026.
+          mostly with Java, Python, Spring Boot, and React. Currently I&apos;m at
+          Deloitte&apos;s Engineering, AI &amp; Data team in Thessaloniki,
+          working full-time.
         </motion.p>
 
         <div className="mt-8 flex flex-wrap gap-2">

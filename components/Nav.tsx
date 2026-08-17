@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useBootReady } from "@/components/BootSequence";
 import { NAV_SCROLL_OFFSET, scrollToSection } from "@/lib/scroll";
 
 const SECTION_IDS = [
@@ -56,7 +55,6 @@ function updateHash(sectionId: SectionId) {
 }
 
 export default function Nav() {
-  const bootReady = useBootReady();
   const [activeSection, setActiveSection] = useState<SectionId | "">("");
   const [menuOpen, setMenuOpen] = useState(false);
   const initialHashHandled = useRef(false);
@@ -112,7 +110,7 @@ export default function Nav() {
   }, []);
 
   useEffect(() => {
-    if (!bootReady || initialHashHandled.current) return;
+    if (initialHashHandled.current) return;
 
     const hash = window.location.hash.replace("#", "");
     if (!hash || !isSectionId(hash)) return;
@@ -127,7 +125,7 @@ export default function Nav() {
     }, 100);
 
     return () => window.clearTimeout(timer);
-  }, [bootReady]);
+  }, []);
 
   const handleNavClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
