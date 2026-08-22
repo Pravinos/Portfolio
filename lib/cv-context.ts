@@ -89,10 +89,10 @@ Local AI coding tutor for programming beginners. Runs entirely on-device via LM 
 Stack: Python, Streamlit, LM Studio, Ollama
 GitHub: https://github.com/Pravinos/DevTutor-AI
 
-This site - Portfolio with AI Chat
-Terminal-themed developer portfolio with an embedded AI chat widget powered by Groq. Visitors can ask anything about Pravinos's background - it answers from structured CV context streamed in real time.
-Stack: Next.js, Groq, llama-3.3-70b, Tailwind, Framer Motion
-GitHub: https://github.com/Pravinos/
+Guess the Baller - Football Career-Path Guessing Game
+A football career-path guessing game that challenges users to identify a player based on their club-by-club career timeline. The game offers multiple modes, including Casual, Timed, Streak, and Head-to-Head, each with unique gameplay mechanics.
+Stack: Next.js (App Router) + TypeScript, Tailwind CSS, Framer Motion, Supabase (Postgres), Wikidata + Wikipedia REST API
+GitHub: https://github.com/Pravinos/guess-the-baller
 
 FireRiskMaps - Military Service Project
 Fire risk mapping tool built during military service for actual use in the office he served at. Visualises fire risk zones and data relevant to military operational planning. Built and deployed for real internal use.

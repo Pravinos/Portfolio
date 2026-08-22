@@ -63,14 +63,15 @@ const MAIN_PROJECTS: ProjectData[] = [
     featured: false,
   },
   {
-    id: "portfolio",
-    name: "This site",
-    description:
-      "Terminal-themed developer portfolio with an embedded AI chat widget powered by Groq. Ask it anything about my background - it answers from structured CV context streamed in real time.",
-    stack: ["Next.js", "Groq", "llama-3.3-70b", "Tailwind", "Framer Motion"],
-    github: "https://github.com/Pravinos/",
-    featured: false,
-  },
+  "id": "guess-the-baller",
+  "name": "Guess the Baller",
+  "description":
+    "A football career-path guessing game that challenges users to identify a player based on their club-by-club career timeline. The game offers multiple modes, including Casual, Timed, Streak, and Head-to-Head, each with unique gameplay mechanics.",
+  "stack": ["Next.js (App Router) + TypeScript", "Tailwind CSS", "Framer Motion", "Supabase (Postgres)", "Wikidata + Wikipedia REST API"],
+  "github": "https://github.com/Pravinos/guess-the-baller",
+  "featured": false
+}
+,
 ];
 
 const MILITARY_PROJECT: ProjectData = {
