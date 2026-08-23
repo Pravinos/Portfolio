@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { ConsentProvider } from "@/components/ConsentProvider";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import StatusBar from "@/components/StatusBar";
@@ -80,6 +81,7 @@ export default function RootLayout({
           <KeyboardShortcuts />
           <StatusBar />
         </ConsentProvider>
+        <Analytics />
       </body>
     </html>
   );
