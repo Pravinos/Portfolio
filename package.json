@@ -12,6 +12,7 @@
   "dependencies": {
     "@ai-sdk/groq": "^4.0.1",
     "@ai-sdk/react": "^4.0.5",
+    "@vercel/analytics": "^2.0.1",
     "ai": "^7.0.4",
     "framer-motion": "^12.42.0",
     "lucide-react": "^1.23.0",
