@@ -67,7 +67,7 @@ export default function PrivacyPage() {
           </p>
           <p className="mt-3">
             If you <strong className="font-medium text-[#e2e2e2]">accept</strong>{" "}
-            analytics cookies, Google Analytics collects usage data such as
+            analytics, Google Analytics and Vercel Analytics collect usage data such as
             pages viewed, approximate location derived from IP, device/browser
             information, and interactions you trigger (for example link clicks).
             Analytics does not run unless you consent.
@@ -94,10 +94,10 @@ export default function PrivacyPage() {
             </li>
             <li>
               <strong className="font-medium text-[#e2e2e2]">
-                Google Analytics:
+                Analytics providers:
               </strong>{" "}
-              your consent (Art. 6(1)(a) GDPR). No analytics cookies or GA
-              scripts load until you accept.
+              your consent (Art. 6(1)(a) GDPR). No analytics scripts load until
+              you accept.
             </li>
           </ul>
         </section>
@@ -107,7 +107,7 @@ export default function PrivacyPage() {
             4. Google Analytics
           </h2>
           <p className="mt-3">
-            Analytics is provided by Google LLC (USA). Google processes data
+            Google Analytics is provided by Google LLC (USA). Google processes data
             under its own terms and may transfer data outside the European
             Economic Area. Google participates in the EU-US Data Privacy
             Framework. See{" "}
@@ -118,6 +118,20 @@ export default function PrivacyPage() {
               className="terminal-interactive inline-flex items-center text-accent underline underline-offset-2 transition-colors duration-200 hover:text-accent-bright"
             >
               Google&apos;s Privacy Policy
+            </a>
+            .
+          </p>
+          <p className="mt-3">
+            Vercel Analytics is provided by Vercel Inc. and records aggregate
+            page-view and visitor information. It is also disabled until you
+            accept analytics. See{" "}
+            <a
+              href="https://vercel.com/docs/analytics/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="terminal-interactive inline-flex items-center text-accent underline underline-offset-2 transition-colors duration-200 hover:text-accent-bright"
+            >
+              Vercel Analytics privacy information
             </a>
             .
           </p>

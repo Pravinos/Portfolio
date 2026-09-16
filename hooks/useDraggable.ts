@@ -10,7 +10,7 @@ const MIN_SIZE: Size = { width: 320, height: 280 };
 const VIEWPORT_MARGIN = 12;
 
 function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
+  return Math.min(Math.max(value, min), Math.max(min, max));
 }
 
 export function useDraggableWindow(
@@ -55,9 +55,47 @@ export function useDraggableWindow(
 
   useEffect(() => {
     if (isVisible && position === null) {
-      initPosition();
+      const frame = requestAnimationFrame(initPosition);
+      return () => cancelAnimationFrame(frame);
     }
   }, [isVisible, position, initPosition]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const keepInViewport = () => {
+      const maxWidth = Math.max(minSize.width, window.innerWidth - VIEWPORT_MARGIN * 2);
+      const maxHeight = Math.max(minSize.height, window.innerHeight - VIEWPORT_MARGIN * 2);
+
+      setSize((currentSize) => {
+        const nextSize = {
+          width: Math.min(currentSize.width, maxWidth),
+          height: Math.min(currentSize.height, maxHeight),
+        };
+
+        setPosition((currentPosition) =>
+          currentPosition
+            ? {
+                x: clamp(
+                  currentPosition.x,
+                  VIEWPORT_MARGIN,
+                  window.innerWidth - nextSize.width - VIEWPORT_MARGIN,
+                ),
+                y: clamp(
+                  currentPosition.y,
+                  VIEWPORT_MARGIN,
+                  window.innerHeight - nextSize.height - VIEWPORT_MARGIN,
+                ),
+              }
+            : currentPosition,
+        );
+        return nextSize;
+      });
+    };
+
+    window.addEventListener("resize", keepInViewport);
+    return () => window.removeEventListener("resize", keepInViewport);
+  }, [isVisible, minSize.height, minSize.width]);
 
   const onDragStart = useCallback((event: React.MouseEvent) => {
     if ((event.target as HTMLElement).closest("button")) return;

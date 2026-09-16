@@ -112,7 +112,7 @@ export function Education() {
         >
           <div className="flex items-center gap-3">
             <p className="font-mono text-sm uppercase tracking-[3px] text-accent sm:text-[12px]">
-              <span className="cmd-prefix-sm-hidden">// </span>thesis
+              <span className="cmd-prefix-sm-hidden">{"// "}</span>thesis
             </p>
             <div className="h-px flex-1 bg-border" />
           </div>
@@ -189,7 +189,7 @@ export function Education() {
 
         <div className="mt-12">
           <p className="font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
-            <span className="cmd-prefix-sm-hidden">// </span>academic projects
+            <span className="cmd-prefix-sm-hidden">{"// "}</span>academic projects
           </p>
 
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -235,7 +235,7 @@ export function Education() {
           </div>
 
           <p className="mt-10 font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
-            <span className="cmd-prefix-sm-hidden">// </span>other highlights
+            <span className="cmd-prefix-sm-hidden">{"// "}</span>other highlights
           </p>
 
           <ul className="mt-4 space-y-3">

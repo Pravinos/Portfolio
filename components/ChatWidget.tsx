@@ -8,6 +8,7 @@ import { trackEvent } from "@/lib/analytics";
 import ChatMarkdown from "@/components/ChatMarkdown";
 import { resolveChatError } from "@/lib/chat-errors";
 import { useDraggableWindow } from "@/hooks/useDraggable";
+import { useDialogFocus } from "@/hooks/useDialogFocus";
 import { PORTFOLIO_EVENTS } from "@/lib/portfolio-events";
 
 const STARTER_QUESTIONS = [
@@ -95,6 +96,7 @@ export default function ChatWidget() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
 
   const { messages, sendMessage, status, error } = useChat();
@@ -116,6 +118,7 @@ export default function ChatWidget() {
     defaultSize: CHAT_WIDGET_DEFAULT_SIZE,
     minSize: CHAT_WIDGET_MIN_SIZE,
   });
+  useDialogFocus(isWindowVisible, windowRef, inputRef);
 
   useEffect(() => {
     if (isWindowVisible) {
@@ -215,6 +218,10 @@ export default function ChatWidget() {
 
             <motion.div
               ref={windowRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="chat-window-title"
+              tabIndex={-1}
               data-chat-window
               initial={
                 isMobile
@@ -270,6 +277,7 @@ export default function ChatWidget() {
               />
 
               <button
+                id="chat-window-title"
                 type="button"
                 onClick={() => isMinimized && setIsMinimized(false)}
                 className={`min-w-0 flex-1 truncate text-left font-mono text-base text-muted sm:text-sm ${
@@ -394,6 +402,7 @@ export default function ChatWidget() {
                     $
                   </span>
                   <input
+                    ref={inputRef}
                     type="text"
                     value={input}
                     onChange={(event) => setInput(event.target.value)}

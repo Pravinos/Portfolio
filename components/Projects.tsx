@@ -234,7 +234,7 @@ export default function Projects() {
         <div className="mx-auto mt-12 max-w-5xl border-t border-border pt-10">
           <div className="mb-6 flex items-center gap-3">
             <p className="font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
-              <span className="cmd-prefix-sm-hidden">// </span>built during military service
+              <span className="cmd-prefix-sm-hidden">{"// "}</span>built during military service
             </p>
             <div className="h-px flex-1 bg-border" />
           </div>

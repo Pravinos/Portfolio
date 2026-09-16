@@ -10,6 +10,7 @@ import {
 } from "react";
 import { ConsentBanner } from "@/components/ConsentBanner";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { Analytics } from "@vercel/analytics/next";
 import { updateGtagConsent } from "@/lib/analytics";
 import {
   persistConsent,
@@ -46,8 +47,11 @@ export function ConsentProvider({ children, gaId }: Props) {
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
-    setConsent(syncConsentFromStorage());
-    setIsReady(true);
+    const frame = requestAnimationFrame(() => {
+      setConsent(syncConsentFromStorage());
+      setIsReady(true);
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   const acceptAnalytics = useCallback(() => {
@@ -81,7 +85,12 @@ export function ConsentProvider({ children, gaId }: Props) {
       }}
     >
       {children}
-      {gaId && consent === "granted" && <GoogleAnalytics gaId={gaId} />}
+      {consent === "granted" && (
+        <>
+          {gaId && <GoogleAnalytics gaId={gaId} />}
+          <Analytics />
+        </>
+      )}
       {showBanner && (
         <ConsentBanner
           onAccept={acceptAnalytics}

@@ -32,12 +32,7 @@ export function TypingHeader({
   const [cursorVisible, setCursorVisible] = useState(false);
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      setVisibleCount(text.length);
-      setPhase("done");
-      setCursorVisible(false);
-      return;
-    }
+    if (prefersReducedMotion) return;
 
     if (!isInView || hasStarted.current) return;
     hasStarted.current = true;
@@ -47,10 +42,9 @@ export function TypingHeader({
     setCursorVisible(true);
 
     let charIndex = 0;
-    let typeTimer: ReturnType<typeof setInterval> | undefined;
     let blinkTimeout: ReturnType<typeof setTimeout> | undefined;
 
-    typeTimer = setInterval(() => {
+    const typeTimer = setInterval(() => {
       charIndex += 1;
       setVisibleCount(charIndex);
 
@@ -83,12 +77,14 @@ export function TypingHeader({
     };
   }, [isInView, prefersReducedMotion, text]);
 
+  const displayedCount = prefersReducedMotion ? text.length : visibleCount;
   const showCursor =
-    phase === "typing" || (phase === "blinking" && cursorVisible);
+    !prefersReducedMotion &&
+    (phase === "typing" || (phase === "blinking" && cursorVisible));
 
   return (
     <motion.p ref={ref} className={className} aria-label={text}>
-      {text.slice(0, visibleCount)}
+      {text.slice(0, displayedCount)}
       {showCursor && <span aria-hidden="true">█</span>}
     </motion.p>
   );

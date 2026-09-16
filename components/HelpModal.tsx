@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { useDialogFocus } from "@/hooks/useDialogFocus";
 
 export type ShortcutEntry = {
   keys: string[];
@@ -38,6 +39,7 @@ function formatKey(key: string): string {
 
 export default function HelpModal({ open, onClose }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogFocus(open, dialogRef);
 
   useEffect(() => {
     if (!open) return;
@@ -52,12 +54,6 @@ export default function HelpModal({ open, onClose }: Props) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open, onClose]);
-
-  useEffect(() => {
-    if (open) {
-      dialogRef.current?.focus();
-    }
-  }, [open]);
 
   return (
     <AnimatePresence>

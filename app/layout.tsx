@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import { ConsentProvider } from "@/components/ConsentProvider";
+import { siteUrl } from "@/lib/site";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import StatusBar from "@/components/StatusBar";
 import "./globals.css";
@@ -12,7 +12,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://portfolio.prav1nos.me"),
+  metadataBase: new URL(siteUrl),
   title: "Pravinos Thomas | Software Engineer",
   description:
     "Software engineer based in Thessaloniki, Greece. Backend, AI tooling, and full-stack development with Java, Python, Spring Boot, and React.",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: "https://portfolio.prav1nos.me",
+    url: siteUrl,
     title: "Pravinos Thomas | Software Engineer",
     description:
       "Software engineer based in Thessaloniki, Greece. Backend, AI tooling, and full-stack development with Java, Python, Spring Boot, and React.",
@@ -81,7 +81,6 @@ export default function RootLayout({
           <KeyboardShortcuts />
           <StatusBar />
         </ConsentProvider>
-        <Analytics />
       </body>
     </html>
   );

@@ -21,16 +21,15 @@ export function ConsentBanner({ onAccept, onReject }: Props) {
             id="consent-banner-title"
             className="font-mono text-sm font-medium text-[#e2e2e2]"
           >
-            // analytics consent
+            {"// analytics consent"}
           </p>
           <p
             id="consent-banner-description"
             className="mt-2 text-sm leading-relaxed text-[#888888]"
           >
-            This site uses Google Analytics to understand how visitors use the
-            portfolio. If you accept, Google LLC (USA) processes usage data
-            including page views and interactions. You can reject analytics or
-            change your choice anytime.{" "}
+            This site uses Google Analytics and Vercel Analytics to understand
+            how visitors use the portfolio. They load only if you accept. You
+            can reject analytics or change your choice anytime.{" "}
             <Link
               href="/privacy"
               className="terminal-interactive inline-flex items-center text-accent underline underline-offset-2 transition-colors duration-200 hover:text-accent-bright"

@@ -68,7 +68,7 @@ export function About() {
 
             <div className="mt-8">
               <p className="font-mono text-sm uppercase tracking-[3px] text-accent sm:text-[12px]">
-                <span className="cmd-prefix-sm-hidden">// </span>currently
+                <span className="cmd-prefix-sm-hidden">{"// "}</span>currently
               </p>
               <div className="mt-3 space-y-1">
                 {CURRENTLY.map((line) => (
@@ -88,7 +88,7 @@ export function About() {
             viewport={{ once: true, margin: "-80px" }}
           >
             <p className="font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
-              <span className="cmd-prefix-sm-hidden">// </span>at a glance
+              <span className="cmd-prefix-sm-hidden">{"// "}</span>at a glance
             </p>
 
             <dl className="mt-6 flex flex-col gap-4">
@@ -104,7 +104,7 @@ export function About() {
 
             <div className="mt-10">
               <p className="font-mono text-sm uppercase tracking-[3px] text-dim sm:text-[12px]">
-                <span className="cmd-prefix-sm-hidden">// </span>languages
+                <span className="cmd-prefix-sm-hidden">{"// "}</span>languages
               </p>
               <dl className="mt-4 flex flex-col gap-3">
                 {LANGUAGES.map(({ name, level }) => (

@@ -38,10 +38,11 @@ function isSectionId(value: string): value is SectionId {
   return (SECTION_IDS as readonly string[]).includes(value);
 }
 
-function updateHash(sectionId: SectionId) {
+function updateHash(sectionId: SectionId, mode: "push" | "replace" = "replace") {
+  const update = mode === "push" ? history.pushState.bind(history) : history.replaceState.bind(history);
   if (sectionId === "hero") {
     if (!window.location.hash) return;
-    history.replaceState(
+    update(
       null,
       "",
       `${window.location.pathname}${window.location.search}`,
@@ -51,7 +52,7 @@ function updateHash(sectionId: SectionId) {
 
   const nextHash = `#${sectionId}`;
   if (window.location.hash === nextHash) return;
-  history.replaceState(null, "", nextHash);
+  update(null, "", nextHash);
 }
 
 export default function Nav() {
@@ -110,6 +111,22 @@ export default function Nav() {
   }, []);
 
   useEffect(() => {
+    const handleHistoryNavigation = () => {
+      const hash = window.location.hash.replace("#", "");
+      const sectionId = isSectionId(hash) ? hash : "hero";
+      clickScrollRef.current = true;
+      scrollToSection(sectionId);
+      setActiveSection(sectionId);
+      window.setTimeout(() => {
+        clickScrollRef.current = false;
+      }, 800);
+    };
+
+    window.addEventListener("popstate", handleHistoryNavigation);
+    return () => window.removeEventListener("popstate", handleHistoryNavigation);
+  }, []);
+
+  useEffect(() => {
     if (initialHashHandled.current) return;
 
     const hash = window.location.hash.replace("#", "");
@@ -135,7 +152,7 @@ export default function Nav() {
     clickScrollRef.current = true;
     scrollToSection(sectionId);
     setActiveSection(sectionId);
-    updateHash(sectionId);
+    updateHash(sectionId, "push");
     setMenuOpen(false);
 
     window.setTimeout(() => {
