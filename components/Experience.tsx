@@ -9,32 +9,33 @@ type ExperienceData = ExperienceEntry & { description: string };
 const EXPERIENCES: ExperienceData[] = [
   {
     id: "deloitte",
-    role: "Software Engineer · Business Analyst",
+    role: "Software Engineer · Engineering, AI & Data",
     company: "Deloitte",
     location: "Thessaloniki, Greece",
-    startDate: "Aug 2024 – Nov 2025 · Aug 2026",
+    startDate: "Aug 2024",
     endDate: "present",
     description:
-      "Working in the Engineering, AI & Data department, building smart, scalable software solutions using Java, Python, and modern technologies. Responsibilities span developing RESTful APIs, integrating databases, and applying AI to improve code quality, system performance, and team productivity.",
+      "Building backend systems and AI/LLM applications, including Spring Boot microservices for banking and self-hosted LLM tooling for enterprise legacy modernization. Paused from November 2025 to August 2026 for mandatory military service.",
     bullets: [
-      "Legacy Code Modernisation - Built a Python + LLM tool that translates legacy systems into current technologies, improving migration efficiency during client engagements",
-      "AI Documentation Platform - Developed a Python-based internal tool using LLMs to auto-generate clear documentation for complex codebases, accelerating team onboarding",
-      "Banking Services - Built secure Spring Boot microservices with REST API and database integrations supporting core internal financial operations",
+      "Built and maintained Spring Boot microservices and REST APIs with pagination, caching, rate limiting, validation, and exception handling",
+      "Engineered a Python tool using self-hosted LLMs to translate monolithic COBOL codebases into structured Java microservices, tested across 20+ legacy projects",
+      "Built an AI-powered legacy analysis and documentation platform adopted by 3+ enterprise clients",
+      "Contributed banking services for onboarding, Greek government KYC/identity verification, personal-data management, and email/SMS notifications",
     ],
   },
   {
     id: "army",
-    role: "Research & Informatics Soldier",
-    company: "Hellenic Army",
-    location: "Veroia, Greece",
+    role: "Network & Systems Administrator · Mandatory Military Service",
+    company: "1st Infantry Division, Hellenic Army",
+    location: "Veria, Greece",
     startDate: "Nov 2025",
     endDate: "Aug 2026",
     description:
-      "Mandatory military service assigned to Research & Informatics (Special Duties). Applied technical background to support IT infrastructure and internal digital workflows.",
+      "Served in the Information Systems Management department, administering secure infrastructure and developing internal software and automation.",
     bullets: [
-      "IT systems support, data management, and internal workflow automation for military operations",
-      "Technical documentation, process standardisation, and troubleshooting",
-      "Built FireRiskMaps - a fire risk visualisation tool deployed for real internal use within the unit (see Projects)",
+      "Administered an Active Directory domain on Windows Server 2019 Enterprise across a secure network of about 150 client nodes",
+      "Designed, developed, and deployed Python software and automation frameworks to streamline unit communications and operations",
+      "Provided 24/7 hardware, software, and network support and trained personnel on systems, specialized software, and security practices",
     ],
   },
   {
@@ -45,10 +46,10 @@ const EXPERIENCES: ExperienceData[] = [
     startDate: "Feb 2024",
     endDate: "Jul 2024",
     description:
-      "Software design and development for internal applications, working across the full stack with Laravel, JavaScript, and relational databases.",
+      "Contributed to backend and internal application development for data-center monitoring and cloud provisioning platforms.",
     bullets: [
-      "Designed and developed internal applications using Laravel, JavaScript, and relational databases",
-      "Implemented RESTful APIs for application integration across internal systems",
+      "Implemented Spring Boot REST endpoints and service-layer logic for collecting, processing, and exposing infrastructure metrics and system status",
+      "Designed internal applications and contributed cloud-provisioning features using Laravel, JavaScript, PHP, and relational databases",
       "Applied Scrum methodologies, promoting agile practices and timely delivery",
     ],
   },

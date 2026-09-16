@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { TypingHeader } from "@/components/TypingHeader";
+import { ExternalLinkArrow } from "@/components/ExternalLinkArrow";
 import { trackEvent } from "@/lib/analytics";
 
 type ProjectData = {
@@ -10,12 +11,14 @@ type ProjectData = {
   description: string;
   detail?: string;
   stack: string[];
-  github: string;
+  github?: string;
   githubLabel?: string;
   githubSecondary?: string;
   githubSecondaryLabel?: string;
   featured?: boolean;
   context?: string;
+  liveUrl?: string;
+  highlights?: string[];
 };
 
 const MAIN_PROJECTS: ProjectData[] = [
@@ -23,10 +26,10 @@ const MAIN_PROJECTS: ProjectData[] = [
     id: "vault",
     name: "Vault",
     description:
-      "A full-stack personal finance platform built as production-ready SaaS. Track spending, income, budgets, and financial goals in one place. Users sign in with JWT authentication and interact with a Spring Boot REST API backed by PostgreSQL, while a Next.js frontend handles dashboards, forms, and day-to-day money management.",
+      "A personal finance SaaS platform with a 55-endpoint Spring Boot API and a Next.js frontend spanning 10+ pages. It covers multi-account balances, category budgets, reversible transfers, investment checkpoints, and financial goals.",
     detail:
-      "Split across vault-api and vault-frontend: the Java/Spring Boot backend covers auth, accounts, transactions, categories, and goal tracking with Spring Security and JWT; the Next.js client consumes REST endpoints for balances, trends, and goal progress. Designed with clear API boundaries, relational data modelling, and a deployable backend/frontend split typical of real SaaS products.",
-    stack: ["Spring Boot", "Java", "Next.js", "TypeScript", "PostgreSQL", "JWT"],
+      "Uses JWT authentication in HttpOnly cookies, BCrypt password hashing, Flyway migrations, and IP-based auth rate limiting. Its AI finance assistant exposes nine tool-calling functions grounded in live financial data, with provider routing between Groq and self-hosted LM Studio.",
+    stack: ["Java 21", "Spring Boot", "Next.js", "TypeScript", "PostgreSQL", "TanStack Query", "Recharts"],
     github: "https://github.com/Pravinos/vault-api",
     githubLabel: "api",
     githubSecondary: "https://github.com/Pravinos/vault-frontend",
@@ -37,9 +40,9 @@ const MAIN_PROJECTS: ProjectData[] = [
     id: "elelem",
     name: "elelem",
     description:
-      "Self-hosted LLM chat app running entirely on personal hardware. No cloud APIs, no token costs, no data leaves the network. Features SSE streaming, persistent chat history, multi-model support via Ollama, intelligent model memory management, and private access over Tailscale.",
+      "A self-hosted LLM chat platform with a FastAPI backend and Next.js frontend running on Ollama, exposing 11 REST endpoints for chat, history, models, and system metrics.",
     detail:
-      "FastAPI backend + Next.js frontend, deployed as a Docker monorepo on a Debian home server. Full REST API with SSE streaming, SQLite persistence, and model lifecycle management.",
+      "Concurrency-safe, asyncio-based session locking serializes model loads and unloads while queueing inference requests; idle models are automatically evicted. Deployed with Docker Compose over Tailscale and covered by 16 pytest tests.",
     stack: [
       "FastAPI",
       "Next.js",
@@ -66,12 +69,29 @@ const MAIN_PROJECTS: ProjectData[] = [
   "id": "guess-the-baller",
   "name": "Guess the Baller",
   "description":
-    "A football career-path guessing game that challenges users to identify a player based on their club-by-club career timeline. The game offers multiple modes, including Casual, Timed, Streak, and Head-to-Head, each with unique gameplay mechanics.",
-  "stack": ["Next.js (App Router) + TypeScript", "Tailwind CSS", "Framer Motion", "Supabase (Postgres)", "Wikidata + Wikipedia REST API"],
-  "github": "https://github.com/Pravinos/guess-the-baller",
-  "featured": false
+    "A football career-path guessing game where players identify footballers from their club and international career history.",
+  "highlights": [
+    "Six modes: Casual, Timed, Streak, Daily Career, Local Head-to-Head, and Online Head-to-Head",
+    "Secure accounts with persistent statistics, match history, custom profile photos, and global leaderboards",
+    "Real-time private rooms with synchronized turns, deadlines, scoring, and sudden death",
+    "Curated Wikidata career records and Wikipedia/Wikimedia images, processed to remove youth, reserve, and duplicate teams",
+    "Server-authoritative game state, authentication, and database security through Supabase",
+  ],
+  "stack": ["Next.js", "React", "TypeScript", "Supabase", "Tailwind CSS", "Framer Motion"],
+  "liveUrl": "https://ballers.prav1nos.me/",
+  "featured": true
 }
 ,
+  {
+    id: "portfolio",
+    name: "Developer Portfolio",
+    description:
+      "This terminal-inspired portfolio, built as a fast, responsive single-page site with an AI assistant that answers questions about my experience, projects, and interests.",
+    stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Groq", "Vercel"],
+    github: "https://github.com/Pravinos/Portfolio",
+    liveUrl: "https://portfolio.prav1nos.me/",
+    featured: false,
+  },
 ];
 
 const MILITARY_PROJECT: ProjectData = {
@@ -86,7 +106,9 @@ const MILITARY_PROJECT: ProjectData = {
   context: "Hellenic Army · Research & Informatics · 2025–2026",
 };
 
-const FEATURED_PROJECT = MAIN_PROJECTS.find((p) => p.featured)!;
+const FEATURED_PROJECTS = ["guess-the-baller", "vault"].map(
+  (id) => MAIN_PROJECTS.find((project) => project.id === id)!,
+);
 const GRID_PROJECTS = MAIN_PROJECTS.filter((p) => !p.featured);
 
 function GitHubIcon() {
@@ -162,14 +184,16 @@ function ProjectCard({
         <h3 className="text-xl font-semibold text-[#e2e2e2] sm:text-2xl">{project.name}</h3>
 
         <div className="flex shrink-0 items-center gap-2">
-          <RepoLink
-            href={project.github}
-            label={project.githubSecondary ? (project.githubLabel ?? "api") : undefined}
-            ariaLabel={`${project.name}${project.githubLabel ? ` ${project.githubLabel}` : ""} on GitHub`}
-            onClick={() =>
-              trackEvent("click", "project", `project_${project.id}_github`)
-            }
-          />
+          {project.github && (
+            <RepoLink
+              href={project.github}
+              label={project.githubSecondary ? (project.githubLabel ?? "api") : undefined}
+              ariaLabel={`${project.name}${project.githubLabel ? ` ${project.githubLabel}` : ""} on GitHub`}
+              onClick={() =>
+                trackEvent("click", "project", `project_${project.id}_github`)
+              }
+            />
+          )}
           {project.githubSecondary && (
             <RepoLink
               href={project.githubSecondary}
@@ -184,12 +208,35 @@ function ProjectCard({
               }
             />
           )}
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open ${project.name}`}
+              className="inline-flex items-center gap-1 rounded border border-transparent px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide text-muted transition-colors duration-200 hover:border-accent/30 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+              onClick={() =>
+                trackEvent("click", "project", `project_${project.id}_live`)
+              }
+            >
+              live
+              <ExternalLinkArrow />
+            </a>
+          )}
         </div>
       </div>
 
       <p className="mt-2 text-lg leading-relaxed text-[#888888]">
         {project.description}
       </p>
+
+      {project.highlights && (
+        <ul className="mt-3 list-disc space-y-1 pl-5 text-base leading-relaxed text-dim">
+          {project.highlights.map((highlight) => (
+            <li key={highlight}>{highlight}</li>
+          ))}
+        </ul>
+      )}
 
       {((featured || compact) && project.detail) && (
         <p className="mt-2 text-base leading-relaxed text-dim">{project.detail}</p>
@@ -222,7 +269,16 @@ export default function Projects() {
         </h2>
 
         <div className="mx-auto mt-12 max-w-5xl">
-          <ProjectCard project={FEATURED_PROJECT} index={0} featured />
+          <div className="space-y-6">
+            {FEATURED_PROJECTS.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index}
+                featured
+              />
+            ))}
+          </div>
 
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
             {GRID_PROJECTS.map((project, index) => (

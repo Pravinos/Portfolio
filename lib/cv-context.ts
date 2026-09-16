@@ -2,7 +2,7 @@ import { PERSONAL_CONTEXT } from "./personal-context";
 
 export const CV_CONTEXT = `
 == ABOUT ==
-Pravinos Thomas is a software engineer based in Thessaloniki, Greece. He builds backend systems, AI-powered developer tools, and full-stack applications - mostly with Java, Python, Spring Boot, and React. He is back at Deloitte's Engineering, AI & Data department in Thessaloniki after completing mandatory Hellenic Army service. He is 26 years old.
+Pravinos Thomas is a software engineer based in Thessaloniki, Greece, specializing in backend systems and AI/LLM applications. His work focuses on self-hosted LLM tooling for enterprise legacy modernization, translating monolithic COBOL systems into structured Java microservices, and delivering full-stack solutions with Python, Java, Spring Boot, and REST APIs. He works in Deloitte's Engineering, AI & Data department and resumed his role in August 2026 after completing mandatory Hellenic Army service. He is 26 years old.
 
 Contact:
 - Email: tpravinos99@gmail.com
@@ -35,27 +35,26 @@ GitHub: https://github.com/Pravinos/AcubeSat-ECSS-ST12-Service
 
 == EXPERIENCE ==
 
-Deloitte - Software Engineer · Business Analyst
-Thessaloniki, Greece | Aug 2024 – Nov 2025 · Aug 2026 – present
-Working in the Engineering, AI & Data department, building smart, scalable software solutions using Java, Python, and modern technologies. Responsibilities span developing RESTful APIs, integrating databases, and applying AI to improve code quality, system performance, and team productivity.
-Key projects:
-- Legacy Code Modernisation - Built a Python + LLM tool that translates legacy systems into current technologies, improving migration efficiency during client engagements
-- AI Documentation Platform - Developed a Python-based internal tool using LLMs to auto-generate clear documentation for complex codebases, accelerating team onboarding
-- Banking Services - Built secure Spring Boot microservices with REST API and database integrations supporting core internal financial operations
+Deloitte - Software Engineer, Engineering, AI & Data Department
+Thessaloniki, Greece | Aug 2024 – present (paused Nov 2025 – Aug 2026 for mandatory military service)
+- Built and maintained Spring Boot microservices and REST APIs with pagination, caching, rate limiting, validation, and exception handling.
+- Contributed banking microservices for customer onboarding, personal-data management, Greek government KYC/identity verification, and email/SMS transaction and validation notifications.
+- Engineered a Python tool using self-hosted LLMs to translate large monolithic COBOL codebases into structured Java microservices; tested across 20+ real-world legacy projects.
+- Built an AI-powered Python legacy code analysis and documentation platform using self-hosted LLMs; adopted by 3+ enterprise clients across production legacy systems.
 
-Hellenic Army - Research & Informatics Soldier
-Veroia, Greece | Nov 2025 – Aug 2026
-Completed mandatory military service in Research & Informatics (Special Duties), applying technical skills to support IT infrastructure and internal digital workflows.
-- IT systems support, data management, and internal workflow automation for military operations
-- Technical documentation, process standardisation, and troubleshooting
-- Built FireRiskMaps - a fire risk visualisation tool deployed for real internal use within the unit (see Projects)
+1st Infantry Division, Hellenic Army - Network & Systems Administrator, Information Systems Management Department
+Veria, Greece | Nov 2025 – Aug 2026 | Mandatory military service
+- Administered an Active Directory domain on Windows Server 2019 Enterprise across a secure network of approximately 150 client nodes.
+- Designed, developed, and deployed internal Python software and automation frameworks to streamline unit communications and remove manual operational bottlenecks.
+- Delivered 24/7 support for hardware, software, and network incidents under high-pressure conditions.
+- Trained military personnel on operating systems, specialized software, and security best practices.
 
 Synapsecom Telecoms S.A. - Junior Software Engineer
 Thessaloniki, Greece | Feb 2024 – Jul 2024
-Software design and development for internal applications, working across the full stack with Laravel, JavaScript, and relational databases.
-- Designed and developed internal applications using Laravel, JavaScript, and relational databases
-- Implemented RESTful APIs for application integration across internal systems
-- Applied Scrum methodologies, promoting agile practices and timely delivery
+- Contributed to a Spring Boot backend for monitoring data-center infrastructure and operational performance, implementing REST endpoints and service-layer logic for system metrics and status data.
+- Designed and developed internal applications using Laravel, JavaScript, and relational databases.
+- Contributed backend features to a PHP/Laravel cloud-provisioning platform.
+- Applied Scrum practices to support project organization and timely delivery.
 
 SpaceDot - AcubeSAT - Software Engineer (Volunteer)
 Thessaloniki, Greece | Jul 2023 – Jul 2024
@@ -73,15 +72,17 @@ Internship contributing to VCLAVIS, a Laravel/Vue.js platform for pressure vesse
 == PROJECTS ==
 
 Vault - Personal Finance SaaS (featured full-stack project)
-A full-stack personal finance platform built as production-ready SaaS. Track spending, income, budgets, and financial goals in one place. Users sign in with JWT authentication and interact with a Spring Boot REST API backed by PostgreSQL, while a Next.js frontend handles dashboards, forms, and day-to-day money management.
-Split across vault-api and vault-frontend: the Java/Spring Boot backend covers auth, accounts, transactions, categories, and goal tracking with Spring Security and JWT; the Next.js client consumes REST endpoints for balances, trends, and goal progress. Designed with clear API boundaries, relational data modelling, and a deployable backend/frontend split typical of real SaaS products.
-Stack: Spring Boot, Java, Next.js, TypeScript, PostgreSQL, JWT
+- Built a 55-endpoint Spring Boot API using Java 21, Spring Security, Spring Data JPA, PostgreSQL, and Flyway. It covers multi-account balances, category budgets, transfers with one-time reversal, investment checkpoints, and financial goal tracking.
+- Built a Next.js/React/TypeScript frontend across 10+ pages using TanStack Query and Recharts.
+- Implemented JWT authentication through HttpOnly cookies, BCrypt password hashing, and IP-based rate limiting of 5 attempts per 15 minutes on authentication endpoints.
+- Designed an AI finance assistant with 9 tool-calling functions for spending trends, budget and goal progress, cash flow, and account balances. Answers are grounded in live financial data, with pluggable routing between Groq and self-hosted LM Studio.
 GitHub: https://github.com/Pravinos/vault-api | https://github.com/Pravinos/vault-frontend
 
-elelem - Self-Hosted LLM Chat App
-Self-hosted LLM chat app running entirely on personal hardware. No cloud APIs, no token costs, no data leaves the network. Features SSE streaming, persistent chat history, multi-model support via Ollama, intelligent model memory management, and private access over Tailscale.
-FastAPI backend + Next.js frontend, deployed as a Docker monorepo on a Debian home server. Full REST API with SSE streaming, SQLite persistence, and model lifecycle management.
-Stack: FastAPI, Next.js, Python, TypeScript, Ollama, Docker, Tailscale, SQLite
+elelem - Self-Hosted LLM Chat Platform
+- Built with a FastAPI backend and Next.js/TypeScript frontend running on Ollama, with 11 REST endpoints across chat, history, model, and system-metrics routers.
+- Containerized with Docker Compose and accessed privately over Tailscale.
+- Uses asyncio-condition-based session locking to serialize model loads and unloads, queue concurrent inference requests, and automatically evict idle models.
+- Covered by a 16-test pytest suite.
 GitHub: https://github.com/Pravinos/elelem
 
 DevTutor AI - Local AI Coding Tutor
@@ -90,9 +91,25 @@ Stack: Python, Streamlit, LM Studio, Ollama
 GitHub: https://github.com/Pravinos/DevTutor-AI
 
 Guess the Baller - Football Career-Path Guessing Game
-A football career-path guessing game that challenges users to identify a player based on their club-by-club career timeline. The game offers multiple modes, including Casual, Timed, Streak, and Head-to-Head, each with unique gameplay mechanics.
-Stack: Next.js (App Router) + TypeScript, Tailwind CSS, Framer Motion, Supabase (Postgres), Wikidata + Wikipedia REST API
-GitHub: https://github.com/Pravinos/guess-the-baller
+- Built a football career-path guessing game where players identify footballers from their club and international career history.
+- Curated player data from Wikidata, with images from Wikipedia/Wikimedia.
+- Built a data-processing pipeline to review career records and remove youth, reserve, and duplicate teams.
+- Includes six modes: Casual, Timed, Streak, Daily Career, Local Head-to-Head, and Online Head-to-Head.
+- Supports secure player accounts with persistent statistics, match history, and custom profile photos.
+- Provides global leaderboards for Daily, Timed, and Streak results.
+- Supports real-time private Head-to-Head rooms with synchronized turns, deadlines, scoring, and sudden death.
+- Uses Supabase for server-authoritative game state, authentication, and database security.
+Stack: Next.js, React, TypeScript, Supabase, Tailwind CSS, Framer Motion
+Live: https://ballers.prav1nos.me
+Source code: Private repository
+
+Developer Portfolio
+- Built this responsive, terminal-inspired single-page portfolio with Next.js, React, TypeScript, and Tailwind CSS.
+- Includes a Groq-powered AI assistant that answers questions about Thomas's experience, projects, skills, and personal interests.
+- Includes consent-controlled analytics, keyboard navigation, accessible dialogs, and distributed chat rate limiting.
+Stack: Next.js, React, TypeScript, Tailwind CSS, Groq, Vercel
+Live: https://portfolio.prav1nos.me
+GitHub: https://github.com/Pravinos/Portfolio
 
 FireRiskMaps - Military Service Project
 Fire risk mapping tool built during military service for actual use in the office he served at. Visualises fire risk zones and data relevant to military operational planning. Built and deployed for real internal use.
@@ -134,23 +151,22 @@ GitHub: https://github.com/Pravinos/Computational-Intelligence
 == SKILLS ==
 Highlighted in hero: Python, Java, Spring Boot, LLMs, FastAPI, React, Next.js, TypeScript, C++
 Broader stack from experience and projects:
-Languages: Python, Java, PHP, JavaScript, TypeScript, C++
+Languages: Python, Java, JavaScript/TypeScript, C++, PHP
 Backend: Spring Boot, FastAPI, Laravel, REST APIs
-Frontend: React, Next.js, Vue.js, React Native
-AI/ML: LLM Applications, RAG, Local AI Inference, Ollama, LM Studio, Groq, Prompt Engineering
-Databases: PostgreSQL, MySQL, Supabase, SQLite
-Infrastructure: Docker, Docker Compose, Tailscale, Cloudflare Tunnel
-Tools: Git, Google Cloud, Vercel, Render, Streamlit, Framer Motion, Tailwind CSS
+Frontend: React, Next.js, React Native
+AI/ML: LLM Applications, Local AI Inference, Ollama, LM Studio, Prompt Engineering
+Databases: PostgreSQL, MySQL, Supabase
+Tools: Docker, Git, GitLab CI, Ansible, Google Cloud, Vercel, Render
 
 == EDUCATION ==
 Integrated Master's degree - Electrical & Computer Engineering
 Aristotle University of Thessaloniki (AUTH) | Oct 2018 – Sep 2024 | Grade: 7.07 | 6-year integrated programme
 
 == CERTIFICATIONS ==
-- Artificial Intelligence Applications - UCERT Greece (Dec 2025) | ID: UGRSPUICT216166 | Skills: Artificial Intelligence, Large Language Models
-- Certified React Developer - W3Schools (Apr 2025) | ID: 1PUJOQP5WM | Skills: React.js, Web Development
-- Microsoft Certified: Azure AI Fundamentals - Microsoft (Jan 2025) | ID: 58B0BE60FF1A104E | Skills: Machine Learning, Artificial Intelligence
-- Python Programming Course - GreekLUG (May 2023) | Skills: Python
+- Azure AI Fundamentals (AI-900) - Microsoft, 2025
+- Artificial Intelligence Applications - UCERT, 2025
+- Certified React Developer - W3Schools, 2025
+- Python Seminar - GreekLUG, 2023
 - Open Workshop: AI in Energy - Aristotle University of Thessaloniki (Mar 2023) | Skills: Artificial Intelligence, Machine Learning
 - Internship Completion Certificate - Aristotle University of Thessaloniki (Nov 2022) | Skills: Laravel, Vue.js, MySQL
 
