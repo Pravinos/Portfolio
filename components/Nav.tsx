@@ -161,10 +161,10 @@ export default function Nav() {
   };
 
   const linkClassName = (sectionId: SectionId) =>
-    `inline-flex items-center font-mono text-lg transition-colors duration-200 ${
+    `relative inline-flex items-center py-1 font-mono text-base transition-colors duration-200 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:bg-accent after:transition-transform after:duration-200 ${
       activeSection === sectionId
-        ? "text-accent underline decoration-accent/60 underline-offset-4"
-        : "text-muted hover:text-accent"
+        ? "text-accent after:scale-x-100"
+        : "text-muted after:scale-x-0 hover:text-text hover:after:scale-x-100"
     }`;
 
   return (
@@ -179,9 +179,7 @@ export default function Nav() {
           href="#hero"
           onClick={(event) => handleNavClick(event, "hero")}
           className={`inline-flex items-center font-mono text-lg transition-colors duration-200 hover:text-accent-bright ${
-            activeSection === "hero"
-              ? "text-accent underline decoration-accent/60 underline-offset-4"
-              : "text-accent"
+            activeSection === "hero" ? "text-accent-bright" : "text-accent"
           }`}
         >
           ~/thomas

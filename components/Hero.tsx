@@ -1,9 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ExternalLinkArrow } from "@/components/ExternalLinkArrow";
 import { trackEvent } from "@/lib/analytics";
+import { PORTFOLIO_EVENTS } from "@/lib/portfolio-events";
+import { scrollToSection } from "@/lib/scroll";
 
 const TITLES = [
   "Software Engineer",
@@ -27,10 +29,22 @@ const TYPE_DELAY = 80;
 const DELETE_DELAY = 40;
 const PAUSE_DELAY = 2000;
 
+function exploreSkill(skill: string) {
+  window.dispatchEvent(
+    new CustomEvent(PORTFOLIO_EVENTS.filterProjects, { detail: skill }),
+  );
+  scrollToSection("projects");
+}
+
 export default function Hero() {
   const [displayText, setDisplayText] = useState("");
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (reduceMotion) {
+      return;
+    }
+
     let timeoutId: ReturnType<typeof setTimeout>;
     let charIndex = 0;
     let titleIndex = 0;
@@ -67,12 +81,12 @@ export default function Hero() {
     timeoutId = setTimeout(tick, TYPE_DELAY);
 
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [reduceMotion]);
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-3xl flex-col justify-start px-4 py-16 pt-28 sm:px-6 md:pt-36">
+    <div className="mx-auto flex min-h-[calc(100svh-3.5rem)] max-w-5xl flex-col justify-center px-4 py-24 sm:px-6 md:py-32">
       <div className="w-full">
-        <p className="mb-4 break-all font-mono text-base text-[#888888] sm:break-normal sm:text-lg">
+        <p className="mb-4 break-all font-mono text-base text-muted sm:break-normal sm:text-lg">
           visitor@thomas-portfolio:~$
         </p>
 
@@ -80,21 +94,21 @@ export default function Hero() {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-4xl font-bold text-[#e2e2e2] sm:text-5xl md:text-7xl"
+          className="max-w-4xl text-5xl font-bold leading-[0.95] tracking-[-0.04em] text-text sm:text-6xl md:text-8xl"
         >
           Pravinos Thomas
         </motion.h1>
 
         <p className="mt-4 font-mono text-2xl text-accent sm:text-3xl md:text-4xl">
-          <span>{displayText}</span>
-          <span className="cursor-blink">|</span>
+          <span>{reduceMotion ? TITLES[0] : displayText}</span>
+          {!reduceMotion && <span className="cursor-blink">|</span>}
         </p>
 
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="font-sans mt-6 max-w-xl text-base leading-relaxed text-[#888888] sm:text-lg"
+          className="mt-7 max-w-2xl font-sans text-base leading-relaxed text-muted sm:text-lg"
         >
           Software engineer based in Thessaloniki, Greece. I build backend
           systems, AI-powered developer tools, and full-stack applications,
@@ -105,19 +119,40 @@ export default function Hero() {
 
         <div className="mt-8 flex flex-wrap gap-2">
           {SKILLS.map((skill, index) => (
-            <motion.span
+            <motion.button
+              type="button"
               key={skill}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 + index * 0.05, duration: 0.3 }}
-              className="rounded-full border border-border bg-surface-elevated px-2.5 py-0.5 font-mono text-sm text-muted transition-colors duration-200 hover:border-accent hover:text-accent"
+              className="terminal-interactive rounded-full border border-border bg-surface-elevated px-2.5 py-1 font-mono text-sm text-muted transition-colors duration-200 hover:border-accent hover:text-accent"
+              onClick={() => exploreSkill(skill)}
+              aria-label={`Show projects using ${skill}`}
             >
               {skill}
-            </motion.span>
+            </motion.button>
           ))}
         </div>
 
-        <div className="mt-10 flex flex-wrap items-center gap-4">
+        <div className="mt-9 flex flex-wrap items-center gap-3">
+          <a
+            href="#projects"
+            className="primary-cta terminal-interactive"
+            onClick={() => trackEvent("click", "cta", "hero_projects")}
+          >
+            View projects
+            <span aria-hidden="true">↓</span>
+          </a>
+          <a
+            href="#contact"
+            className="secondary-cta terminal-interactive"
+            onClick={() => trackEvent("click", "cta", "hero_contact")}
+          >
+            Contact me
+          </a>
+        </div>
+
+        <div className="mt-7 flex flex-wrap items-center gap-4">
           <a
             href="https://github.com/Pravinos/"
             target="_blank"

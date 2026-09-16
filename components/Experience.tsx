@@ -3,6 +3,7 @@
 import type { Experience as ExperienceEntry } from "@/types";
 import { motion } from "framer-motion";
 import { TypingHeader } from "@/components/TypingHeader";
+import { AnimatedDisclosure } from "@/components/AnimatedDisclosure";
 
 type ExperienceData = ExperienceEntry & { description: string };
 
@@ -135,11 +136,17 @@ export default function Experience() {
               {experience.description}
             </p>
 
-            <ul className="mt-2 list-disc space-y-1 pl-4 text-lg text-[#aaaaaa]">
-              {experience.bullets.map((bullet) => (
-                <li key={bullet}>{bullet}</li>
-              ))}
-            </ul>
+            <AnimatedDisclosure
+              closedLabel="+ View selected achievements"
+              openLabel="− Hide selected achievements"
+              className="mt-4 border-border/80 bg-bg/40"
+            >
+              <ul className="list-disc space-y-1.5 pl-5 text-base leading-relaxed text-[#b1b1b8] marker:text-accent/60">
+                {experience.bullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
+                ))}
+              </ul>
+            </AnimatedDisclosure>
           </motion.div>
           );
         })}

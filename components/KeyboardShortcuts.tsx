@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import HelpModal from "@/components/HelpModal";
 import { PORTFOLIO_EVENTS } from "@/lib/portfolio-events";
+import { scrollToSection } from "@/lib/scroll";
 
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
@@ -74,7 +75,19 @@ export default function KeyboardShortcuts() {
       if (hasShortcutModifier(event)) return;
 
       switch (event.key) {
+        case "a":
+          event.preventDefault();
+          scrollToSection("about");
+          break;
+        case "p":
+          event.preventDefault();
+          scrollToSection("projects");
+          break;
         case "c":
+          event.preventDefault();
+          scrollToSection("contact");
+          break;
+        case "/":
           event.preventDefault();
           window.dispatchEvent(new CustomEvent(PORTFOLIO_EVENTS.openChat));
           break;
@@ -85,10 +98,6 @@ export default function KeyboardShortcuts() {
         case "k":
           event.preventDefault();
           window.scrollBy({ top: -80, behavior: "smooth" });
-          break;
-        case "/":
-          event.preventDefault();
-          closeModals();
           break;
         default:
           break;

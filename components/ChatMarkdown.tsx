@@ -17,16 +17,20 @@ const markdownComponents: Components = {
     <strong className="font-semibold text-accent">{children}</strong>
   ),
   em: ({ children }) => <em className="italic text-[#888888]">{children}</em>,
-  a: ({ href, children }) => (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="terminal-interactive inline-flex items-center text-accent underline underline-offset-2 transition-colors duration-200 hover:text-accent-bright"
-    >
-      {children}
-    </a>
-  ),
+  a: ({ href, children }) => {
+    const isInternal = href?.startsWith("#") || href?.startsWith("/");
+
+    return (
+      <a
+        href={href}
+        target={isInternal ? undefined : "_blank"}
+        rel={isInternal ? undefined : "noopener noreferrer"}
+        className="terminal-interactive inline-flex items-center text-accent underline underline-offset-2 transition-colors duration-200 hover:text-accent-bright"
+      >
+        {children}
+      </a>
+    );
+  },
   code: ({ className, children }) => {
     const isBlock = className?.includes("language-");
 

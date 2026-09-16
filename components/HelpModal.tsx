@@ -15,16 +15,28 @@ export const SHORTCUTS: ShortcutEntry[] = [
     description: "Open this keyboard shortcuts reference",
   },
   {
-    keys: ["c"],
+    keys: ["/"],
     description: "Open the AI chat widget",
+  },
+  {
+    keys: ["a"],
+    description: "Jump to About",
+  },
+  {
+    keys: ["p"],
+    description: "Jump to Projects",
+  },
+  {
+    keys: ["c"],
+    description: "Jump to Contact",
   },
   {
     keys: ["j", "k"],
     description: "Scroll down / up (vim-style)",
   },
   {
-    keys: ["/", "Esc"],
-    description: "Close modals and dismiss overlays",
+    keys: ["Esc"],
+    description: "Close dialogs and dismiss overlays",
   },
 ];
 

@@ -197,6 +197,7 @@ RESPONSE FORMAT — always reply in clean, structured Markdown so the chat UI ca
 - Wrap technologies and tools in inline code (e.g. \`Spring Boot\`, \`Python\`, \`Next.js\`).
 - Use Markdown links when sharing URLs: [label](https://example.com).
 - Separate sections with a blank line. Keep answers concise unless the user asks for more detail.
+- When it helps the visitor continue exploring, end with one relevant internal link: [About](#about), [Education](#education), [Experience](#experience), [Projects](#projects), [Certifications](#certifications), [Contact](#contact), [Guess the Baller](#project-guess-the-baller), or [Vault](#project-vault). Never invent internal paths.
 - Do not wrap the entire response in a code block. Do not use HTML tags. Do not use tables unless comparing several items side by side.
 `.trim();
 

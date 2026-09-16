@@ -45,7 +45,7 @@ export default function StatusBar() {
     <footer
       role="contentinfo"
       aria-label="Personal status"
-      className="fixed inset-x-0 bottom-0 z-50 h-[calc(3.5rem+env(safe-area-inset-bottom,0px))] border-t border-white/10 bg-black/90 pb-[env(safe-area-inset-bottom,0px)] backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-50 h-[calc(3.5rem+env(safe-area-inset-bottom,0px))] border-t border-white/[0.07] bg-black/80 pb-[env(safe-area-inset-bottom,0px)] backdrop-blur-md md:h-[calc(2.5rem+env(safe-area-inset-bottom,0px))]"
     >
       {/* Mobile: unified bar with AI icon, status, clock */}
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-3 md:hidden">
@@ -73,8 +73,8 @@ export default function StatusBar() {
       </div>
 
       {/* Desktop: full status row */}
-      <div className="mx-auto hidden h-14 max-w-6xl items-center justify-between px-4 md:flex lg:px-6">
-        <div className="flex min-w-0 flex-wrap items-center gap-x-1 gap-y-0.5 font-mono text-sm text-white/50">
+      <div className="mx-auto hidden h-10 max-w-6xl items-center justify-between px-4 md:flex lg:px-6">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-1 gap-y-0.5 font-mono text-xs text-white/40">
           <span>status: {PROFILE_STATUS.status}</span>
           <span aria-hidden="true">|</span>
           <span>location: {PROFILE_STATUS.location}</span>
@@ -92,11 +92,11 @@ export default function StatusBar() {
             onClick={() =>
               window.dispatchEvent(new CustomEvent(PORTFOLIO_EVENTS.openHelp))
             }
-            className="terminal-interactive inline-flex items-center gap-1 font-mono text-sm text-white/40 transition-colors duration-200 hover:text-accent"
+            className="terminal-interactive inline-flex items-center gap-1 font-mono text-xs text-white/35 transition-colors duration-200 hover:text-accent"
             aria-label="Open keyboard shortcuts"
           >
             <span>shortcuts:</span>
-            <kbd className="rounded border border-white/15 bg-white/5 px-1 py-0.5 text-sm text-accent lg:text-xs">
+            <kbd className="rounded border border-white/15 bg-white/5 px-1 py-0.5 text-xs text-accent">
               ?
             </kbd>
           </button>

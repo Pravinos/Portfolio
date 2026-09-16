@@ -7,11 +7,13 @@ import Projects from "@/components/Projects";
 import { Certifications } from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import ChatWidget from "@/components/ChatWidget";
+import ScrollProgress from "@/components/ScrollProgress";
 
 export default function Home() {
   return (
     <>
       <Nav />
+      <ScrollProgress />
       <main className="page-content">
         <section id="hero">
           <Hero />

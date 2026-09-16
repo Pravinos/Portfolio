@@ -12,6 +12,9 @@ section[id] {
 
 body {
   overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(74, 222, 128, 0.055), transparent 30rem),
+    #0a0a0a;
 }
 
 /* Main content clears fixed status bar + iPhone home indicator */
@@ -30,7 +33,7 @@ body {
 .section-shell {
   max-width: 100%;
   padding-inline: 1rem;
-  padding-block: 4rem;
+  padding-block: 5rem;
 }
 
 @media (min-width: 640px) {
@@ -42,7 +45,53 @@ body {
 @media (min-width: 768px) {
   .section-shell {
     padding-inline: 4rem;
+    padding-block: 6.5rem;
   }
+}
+
+main > section:not(:first-child) {
+  border-top: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.primary-cta,
+.secondary-cta {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.4rem;
+  padding-inline: 1rem;
+  font-family: var(--font-space-grotesk), monospace;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: border-color 180ms ease, background-color 180ms ease,
+    color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.primary-cta {
+  border: 1px solid rgba(74, 222, 128, 0.7);
+  background: #4ade80;
+  color: #071109;
+  box-shadow: 0 0 24px rgba(74, 222, 128, 0.12);
+}
+
+.primary-cta:hover {
+  background: #86efac;
+  box-shadow: 0 0 32px rgba(74, 222, 128, 0.2);
+  transform: translateY(-1px);
+}
+
+.secondary-cta {
+  border: 1px solid #343434;
+  background: rgba(17, 17, 17, 0.8);
+  color: #d4d4d8;
+}
+
+.secondary-cta:hover {
+  border-color: rgba(74, 222, 128, 0.5);
+  color: #86efac;
+  transform: translateY(-1px);
 }
 
 /* Hide terminal command prefixes in body copy on narrow screens */
@@ -54,6 +103,7 @@ body {
 
 :root {
   --color-accent: #4ade80;
+  --font-space-grotesk: "Space Grotesk Variable", "Space Grotesk", system-ui, sans-serif;
 }
 
 @theme inline {
@@ -156,6 +206,21 @@ nav button:hover::after {
 
 .ask-ai-pulse {
   animation: breathe-pulse 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .chat-scroll {

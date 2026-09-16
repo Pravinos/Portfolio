@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ExternalLinkArrow } from "@/components/ExternalLinkArrow";
 import { TypingHeader } from "@/components/TypingHeader";
+import { AnimatedDisclosure } from "@/components/AnimatedDisclosure";
 
 const THESIS_TAGS = [
   "C++",
@@ -123,21 +124,23 @@ export function Education() {
           </p>
 
           <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted">
-            This thesis focuses on the implementation of a Fault Detection,
-            Isolation, and Remediation (FDIR) architecture based on the European
-            ECSS Packet Utilization Standard. The C++ implementation includes
-            the development of the parameter monitoring service ST[12], which
-            allows for defining, enabling, and disabling checks to monitor
-            various on-board parameters. The architecture of the service is
-            fully configurable, allowing for the addition, modification, or
-            removal of checks according to mission needs. Additionally, the
-            thesis provides a detailed description of the code structure of the
-            ST[12] service, the main methods it employs, and the logic behind
-            the various types of checks. The proposed FDIR system aims to
-            enhance the reliability and success probabilities of the AcubeSAT
-            mission conducted by the students of Aristotle University of
-            Thessaloniki.
+            Designed and implemented a configurable C++ fault-detection service
+            for the AcubeSAT nanosatellite using European ECSS standards.
           </p>
+          <AnimatedDisclosure
+            closedLabel="+ Read thesis details"
+            openLabel="− Hide thesis details"
+            className="mt-4 max-w-2xl"
+          >
+            <p className="text-base leading-relaxed text-muted">
+              The FDIR architecture is based on the ECSS Packet Utilization
+              Standard. Its ST[12] parameter-monitoring service defines,
+              enables, and disables checks for on-board parameters while
+              allowing mission teams to add, modify, or remove checks. The
+              thesis documents the code structure, main methods, and checking
+              logic used to improve subsystem reliability and mission success.
+            </p>
+          </AnimatedDisclosure>
 
           <div className="mt-5 rounded border border-border bg-[#0a0a0a]/80 p-4">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">

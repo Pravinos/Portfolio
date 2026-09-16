@@ -59,9 +59,17 @@ export default function Contact() {
       >
         <h2 className="mt-2 text-3xl font-bold text-[#e2e2e2] sm:text-5xl">Get In Touch</h2>
         <p className="mt-4 text-base text-[#888888] sm:text-lg">
-          Have a project in mind or want to collaborate? I&apos;d love to hear
-          from you.
+          Want to discuss backend engineering, AI tooling, or a product worth
+          building? Send me a note and I&apos;ll get back to you.
         </p>
+        <a
+          href={`mailto:${EMAIL}`}
+          className="primary-cta terminal-interactive mt-7"
+          onClick={() => trackEvent("click", "contact", "contact_email_open")}
+        >
+          Email me
+          <span aria-hidden="true">↗</span>
+        </a>
       </motion.div>
 
       <div className="mx-auto mt-12 max-w-md space-y-3 md:max-w-lg md:space-y-2.5">

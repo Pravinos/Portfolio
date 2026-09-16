@@ -11,13 +11,63 @@ import { useDraggableWindow } from "@/hooks/useDraggable";
 import { useDialogFocus } from "@/hooks/useDialogFocus";
 import { PORTFOLIO_EVENTS } from "@/lib/portfolio-events";
 
-const STARTER_QUESTIONS = [
-  "How did you end up on a nanosatellite mission?",
-  "What LLM tools did you build at Deloitte?",
-  "Why build Vault as a full-stack SaaS?",
-  "How serious is the football thing?",
-  "What keeps you entertained in your free time?",
-];
+const STARTER_QUESTIONS: Record<string, string[]> = {
+  default: [
+    "What makes Pravinos a strong software engineer?",
+    "Which project should I explore first?",
+    "What does he do outside of work?",
+  ],
+  about: [
+    "Tell me more about Pravinos",
+    "What does he enjoy outside of work?",
+    "What technologies does he prefer?",
+  ],
+  education: [
+    "How did the nanosatellite thesis work?",
+    "What did he build for AcubeSAT?",
+    "Which academic projects stand out?",
+  ],
+  experience: [
+    "What LLM tools did he build at Deloitte?",
+    "What did he do during military service?",
+    "Summarize his backend experience",
+  ],
+  projects: [
+    "How does Guess the Baller work?",
+    "Why build Vault as a full-stack SaaS?",
+    "Compare Vault and elelem",
+  ],
+  certifications: [
+    "Which AI certifications does he hold?",
+    "What supports his React experience?",
+    "Summarize his verified skills",
+  ],
+  contact: [
+    "What kinds of roles fit Pravinos?",
+    "Summarize his experience for a recruiter",
+    "Where can I find his work?",
+  ],
+};
+
+const FOLLOW_UP_QUESTIONS: Record<string, string[]> = {
+  default: ["Which project best shows his backend skills?", "Summarize his experience for a recruiter"],
+  about: ["How does his working style show up in his projects?", "Which roles suit him best?"],
+  education: ["What engineering skills did the thesis demonstrate?", "Tell me about his SpaceDot work"],
+  experience: ["Which results from Deloitte stand out?", "How did military service broaden his skills?"],
+  projects: ["Compare Guess the Baller and Vault", "Which project uses local AI?"],
+  certifications: ["How do these certifications support his experience?", "What is his strongest technical area?"],
+  contact: ["Draft a short recruiter summary", "Which projects should I review before contacting him?"],
+};
+
+const SECTION_LINKS: Record<string, { href: string; label: string }[]> = {
+  default: [{ href: "#projects", label: "View projects" }, { href: "#experience", label: "View experience" }],
+  about: [{ href: "#about", label: "Read his story" }, { href: "#contact", label: "Contact Pravinos" }],
+  education: [{ href: "#education", label: "View education & thesis" }],
+  experience: [{ href: "#experience", label: "View experience" }, { href: "#projects", label: "See related projects" }],
+  projects: [{ href: "#project-guess-the-baller", label: "Guess the Baller" }, { href: "#project-vault", label: "Vault" }],
+  certifications: [{ href: "#certifications", label: "View certifications" }],
+  contact: [{ href: "#contact", label: "Contact Pravinos" }, { href: "#projects", label: "Review projects" }],
+};
 
 const TITLE_BAR_HEIGHT = 40;
 const MOBILE_BREAKPOINT = 768;
@@ -95,11 +145,20 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [input, setInput] = useState("");
+  const [activeSection, setActiveSection] = useState("default");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
 
-  const { messages, sendMessage, status, error } = useChat();
+  const {
+    messages,
+    sendMessage,
+    status,
+    error,
+    setMessages,
+    stop,
+    clearError,
+  } = useChat();
   const isLoading = status === "submitted" || status === "streaming";
   const chatError = resolveChatError(error);
   const isWindowVisible = isOpen && !isMinimized;
@@ -119,6 +178,21 @@ export default function ChatWidget() {
     minSize: CHAT_WIDGET_MIN_SIZE,
   });
   useDialogFocus(isWindowVisible, windowRef, inputRef);
+
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("main section[id]"));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible?.target.id) setActiveSection(visible.target.id);
+      },
+      { rootMargin: "-20% 0px -55%", threshold: [0.1, 0.3, 0.6] },
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (isWindowVisible) {
@@ -167,6 +241,23 @@ export default function ChatWidget() {
   const handleStarterQuestion = (question: string) => {
     if (isLoading) return;
     void sendMessage({ text: question });
+  };
+
+  const clearConversation = () => {
+    if (isLoading) stop();
+    setMessages([]);
+    clearError();
+    setInput("");
+    window.requestAnimationFrame(() => inputRef.current?.focus());
+    trackEvent("click", "ai_widget", "chat_widget_cleared");
+  };
+
+  const handlePageLink = (href: string) => {
+    trackEvent("click", "ai_widget", `chat_deep_link_${href.slice(1)}`);
+    if (isMobile) {
+      setIsOpen(false);
+      setIsMinimized(false);
+    }
   };
 
   const openChat = () => {
@@ -226,17 +317,23 @@ export default function ChatWidget() {
               initial={
                 isMobile
                   ? { opacity: 0, y: "100%" }
-                  : { opacity: 0, scale: 0.96 }
+                  : { opacity: 0, y: 32, scale: 0.9, filter: "blur(6px)" }
               }
               animate={
-                isMobile ? { opacity: 1, y: 0 } : { opacity: 1, scale: 1 }
+                isMobile
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
               }
               exit={
                 isMobile
                   ? { opacity: 0, y: "100%" }
-                  : { opacity: 0, scale: 0.96 }
+                  : { opacity: 0, y: 20, scale: 0.94, filter: "blur(4px)" }
               }
-              transition={{ duration: 0.22, ease: "easeOut" }}
+              transition={
+                isMobile
+                  ? { type: "spring", stiffness: 280, damping: 30 }
+                  : { type: "spring", stiffness: 340, damping: 28, mass: 0.8 }
+              }
               style={
                 useDesktopWindow
                   ? {
@@ -247,7 +344,7 @@ export default function ChatWidget() {
                     }
                   : undefined
               }
-              className={`fixed z-[90] flex flex-col overflow-hidden bg-[#0d0d0d] shadow-[0_16px_48px_rgba(0,0,0,0.6)] ${
+              className={`fixed z-[90] flex origin-bottom-right flex-col overflow-hidden bg-[#0d0d0d] shadow-[0_20px_70px_rgba(0,0,0,0.72),0_0_40px_rgba(74,222,128,0.06)] ${
                 isMobile
                   ? "inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] h-[70vh] max-h-[calc(100dvh-3.5rem-env(safe-area-inset-bottom,0px)-4rem)] rounded-t-xl border border-b-0 border-[#2a2a2a]"
                   : "rounded-lg border border-[#2a2a2a]"
@@ -296,6 +393,19 @@ export default function ChatWidget() {
                 )}
               </button>
 
+              {!isMinimized && (
+                <button
+                  type="button"
+                  onClick={clearConversation}
+                  disabled={messages.length === 0 && !error}
+                  aria-label="Clear conversation and restore suggested questions"
+                  title="Clear conversation"
+                  className="terminal-interactive rounded border border-border px-2 py-1 font-mono text-xs text-muted transition-colors hover:border-accent/40 hover:text-accent disabled:cursor-not-allowed disabled:opacity-35"
+                >
+                  clear
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={closeChat}
@@ -310,11 +420,21 @@ export default function ChatWidget() {
               <>
                 <div className="chat-scroll flex-1 space-y-3 overflow-y-auto px-4 py-4 font-mono text-base">
                   {messages.length === 0 && (
-                    <p className="text-[#555555]">
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.16, duration: 0.28 }}
+                      className="rounded border border-accent/15 bg-accent/[0.035] p-3"
+                    >
+                    <p className="text-xs uppercase tracking-[0.16em] text-accent/70">
+                      context: {activeSection === "hero" ? "overview" : activeSection}
+                    </p>
+                    <p className="mt-2 leading-relaxed text-muted">
                       <span className="text-accent">#</span> Ask about my work,
                       stack, and projects — or get personal: anime, football,
                       series, games, and more.
                     </p>
+                    </motion.div>
                   )}
 
                   {messages.map((message) => {
@@ -357,18 +477,68 @@ export default function ChatWidget() {
                 </div>
 
                 {messages.length === 0 && (
-                  <div className="flex flex-wrap gap-2 border-t border-[#2a2a2a] px-4 py-3">
-                    {STARTER_QUESTIONS.map((question) => (
-                      <button
+                  <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                      hidden: {},
+                      visible: {
+                        transition: { staggerChildren: 0.055, delayChildren: 0.2 },
+                      },
+                    }}
+                    className="flex flex-wrap gap-2 border-t border-[#2a2a2a] px-4 py-3"
+                  >
+                    {(STARTER_QUESTIONS[activeSection] ?? STARTER_QUESTIONS.default).map((question) => (
+                      <motion.button
                         key={question}
                         type="button"
                         onClick={() => handleStarterQuestion(question)}
+                        variants={{
+                          hidden: { opacity: 0, y: 6 },
+                          visible: { opacity: 1, y: 0 },
+                        }}
                         className="terminal-interactive inline-flex items-center rounded border border-border bg-surface2 px-2 py-1 font-mono text-base text-muted transition-colors duration-200 hover:border-accent/50 hover:text-accent sm:text-sm"
                       >
                         {question}
-                      </button>
+                      </motion.button>
                     ))}
-                  </div>
+                  </motion.div>
+                )}
+
+                {messages.length > 0 && !isLoading && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="space-y-2 border-t border-[#2a2a2a] px-4 py-3"
+                  >
+                    <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent/60">
+                      continue exploring
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {(SECTION_LINKS[activeSection] ?? SECTION_LINKS.default).map((link) => (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => handlePageLink(link.href)}
+                          className="terminal-interactive rounded border border-accent/30 bg-accent/[0.07] px-2 py-1 font-mono text-sm text-accent transition-colors hover:border-accent/60 hover:bg-accent/10"
+                        >
+                          {link.label} <span aria-hidden="true">↗</span>
+                        </a>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {(FOLLOW_UP_QUESTIONS[activeSection] ?? FOLLOW_UP_QUESTIONS.default).map((question) => (
+                        <button
+                          key={question}
+                          type="button"
+                          onClick={() => handleStarterQuestion(question)}
+                          className="terminal-interactive rounded border border-border bg-surface2 px-2 py-1 text-left font-mono text-sm text-muted transition-colors hover:border-accent/40 hover:text-text"
+                        >
+                          {question}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
                 )}
 
                 {chatError && (
@@ -445,15 +615,15 @@ export default function ChatWidget() {
       <motion.button
         type="button"
         onClick={handleToggle}
-        aria-label={isOpen && !isMinimized ? "Close chat" : "Ask AI"}
+        aria-label={isOpen && !isMinimized ? "Close chat" : "Ask about Pravinos"}
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.97 }}
-        className={`ask-ai-pulse terminal-interactive fixed bottom-24 right-6 z-[45] hidden items-center gap-2 rounded-full border border-accent/30 bg-surface2 px-5 py-3.5 font-mono text-base text-accent transition-colors duration-200 hover:border-accent/60 hover:bg-surface-elevated md:flex ${
+        className={`ask-ai-pulse terminal-interactive fixed bottom-16 right-6 z-[45] hidden items-center gap-2 rounded-full border border-accent/30 bg-surface2 px-5 py-3 font-mono text-sm text-accent transition-colors duration-200 hover:border-accent/60 hover:bg-surface-elevated md:flex ${
           isOpen && !isMinimized ? "opacity-80" : ""
         }`}
       >
         <TerminalPromptIcon />
-        <span>Ask AI</span>
+        <span>Ask about Pravinos</span>
       </motion.button>
     </>
   );

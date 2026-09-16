@@ -93,8 +93,9 @@ export function Certifications() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="rounded-lg border border-border bg-surface2 p-4"
+              className="group relative overflow-hidden rounded-lg border border-border bg-surface2 p-5 transition-[border-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-blue/50 hover:shadow-[0_14px_36px_rgba(0,0,0,0.2)]"
             >
+              <div className="absolute inset-y-0 left-0 w-px bg-blue/70 opacity-50 transition-opacity group-hover:opacity-100" />
               <h3 className="font-sans text-lg font-medium text-text">
                 {cert.name}
               </h3>

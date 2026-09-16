@@ -1,9 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { TypingHeader } from "@/components/TypingHeader";
 import { ExternalLinkArrow } from "@/components/ExternalLinkArrow";
 import { trackEvent } from "@/lib/analytics";
+import { PORTFOLIO_EVENTS } from "@/lib/portfolio-events";
 
 type ProjectData = {
   id: string;
@@ -19,6 +21,7 @@ type ProjectData = {
   context?: string;
   liveUrl?: string;
   highlights?: string[];
+  outcomes?: string[];
 };
 
 const MAIN_PROJECTS: ProjectData[] = [
@@ -35,6 +38,7 @@ const MAIN_PROJECTS: ProjectData[] = [
     githubSecondary: "https://github.com/Pravinos/vault-frontend",
     githubSecondaryLabel: "frontend",
     featured: true,
+    outcomes: ["55 API endpoints", "10+ frontend pages", "9 AI tools"],
   },
   {
     id: "elelem",
@@ -80,11 +84,12 @@ const MAIN_PROJECTS: ProjectData[] = [
   "stack": ["Next.js", "React", "TypeScript", "Supabase", "Tailwind CSS", "Framer Motion"],
   "liveUrl": "https://ballers.prav1nos.me/",
   "featured": true
+  ,"outcomes": ["6 game modes", "Real-time multiplayer", "Global leaderboards"]
 }
 ,
   {
     id: "portfolio",
-    name: "Developer Portfolio",
+    name: "Portfolio",
     description:
       "This terminal-inspired portfolio, built as a fast, responsive single-page site with an AI assistant that answers questions about my experience, projects, and interests.",
     stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Groq", "Vercel"],
@@ -142,7 +147,7 @@ function RepoLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={ariaLabel}
-      className="inline-flex items-center gap-1.5 rounded border border-transparent px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide text-muted transition-colors duration-200 hover:border-accent/30 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+      className="inline-flex min-h-9 items-center gap-1.5 rounded border border-border bg-bg/70 px-3 py-1.5 font-mono text-xs uppercase tracking-wide text-muted transition-colors duration-200 hover:border-accent/40 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
       onClick={onClick}
     >
       <GitHubIcon />
@@ -156,11 +161,13 @@ function ProjectCard({
   index,
   featured = false,
   compact = false,
+  dimmed = false,
 }: {
   project: ProjectData;
   index: number;
   featured?: boolean;
   compact?: boolean;
+  dimmed?: boolean;
 }) {
   return (
     <motion.article
@@ -168,10 +175,11 @@ function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       viewport={{ once: true }}
-      className={`w-full rounded-lg border bg-surface2 transition-colors duration-200 hover:border-accent/50 hover:shadow-[0_0_20px_rgba(74,222,128,0.05)] ${
+      id={`project-${project.id}`}
+      className={`group w-full scroll-mt-28 rounded-lg border bg-surface2/90 transition-[border-color,transform,box-shadow,opacity] duration-200 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-[0_16px_44px_rgba(0,0,0,0.24)] ${dimmed ? "opacity-35" : "opacity-100"} ${
         featured
-          ? "border-accent/40 p-4 shadow-[0_0_24px_rgba(74,222,128,0.08)] sm:p-6"
-          : "border-border p-4"
+          ? "border-accent/35 p-5 shadow-[0_0_24px_rgba(74,222,128,0.06)] sm:p-7"
+          : "h-full border-border p-5"
       }`}
     >
       {project.context && (
@@ -180,8 +188,15 @@ function ProjectCard({
         </p>
       )}
 
-      <div className="flex items-start justify-between gap-4">
-        <h3 className="text-xl font-semibold text-[#e2e2e2] sm:text-2xl">{project.name}</h3>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          {featured && (
+            <p className="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-accent">
+              featured project
+            </p>
+          )}
+          <h3 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">{project.name}</h3>
+        </div>
 
         <div className="flex shrink-0 items-center gap-2">
           {project.github && (
@@ -214,24 +229,38 @@ function ProjectCard({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Open ${project.name}`}
-              className="inline-flex items-center gap-1 rounded border border-transparent px-1.5 py-0.5 font-mono text-xs uppercase tracking-wide text-muted transition-colors duration-200 hover:border-accent/30 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+              className="inline-flex min-h-9 items-center gap-1.5 rounded border border-accent/40 bg-accent/10 px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-accent transition-colors duration-200 hover:border-accent/70 hover:bg-accent/15 focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
               onClick={() =>
                 trackEvent("click", "project", `project_${project.id}_live`)
               }
             >
-              live
+              visit live
               <ExternalLinkArrow />
             </a>
           )}
         </div>
       </div>
 
-      <p className="mt-2 text-lg leading-relaxed text-[#888888]">
+      <p className="mt-4 max-w-4xl text-base leading-relaxed text-muted sm:text-lg">
         {project.description}
       </p>
 
+      {project.outcomes && (
+        <dl className="mt-5 grid gap-px overflow-hidden rounded border border-border bg-border sm:grid-cols-3">
+          {project.outcomes.map((outcome) => {
+            const [value, ...label] = outcome.split(" ");
+            return (
+              <div key={outcome} className="bg-bg/90 px-4 py-3">
+                <dt className="font-mono text-lg font-semibold text-accent">{value}</dt>
+                <dd className="mt-0.5 text-sm text-muted">{label.join(" ")}</dd>
+              </div>
+            );
+          })}
+        </dl>
+      )}
+
       {project.highlights && (
-        <ul className="mt-3 list-disc space-y-1 pl-5 text-base leading-relaxed text-dim">
+        <ul className="mt-4 max-w-4xl list-disc space-y-1.5 pl-5 text-base leading-relaxed text-dim marker:text-accent/60">
           {project.highlights.map((highlight) => (
             <li key={highlight}>{highlight}</li>
           ))}
@@ -239,14 +268,14 @@ function ProjectCard({
       )}
 
       {((featured || compact) && project.detail) && (
-        <p className="mt-2 text-base leading-relaxed text-dim">{project.detail}</p>
+        <p className="mt-3 max-w-4xl text-base leading-relaxed text-dim">{project.detail}</p>
       )}
 
       <div className="mt-4 flex flex-wrap gap-2">
         {project.stack.map((tech) => (
           <span
             key={tech}
-            className="rounded border border-border bg-bg px-2 py-0.5 font-mono text-base text-accent"
+            className="rounded border border-border bg-bg/80 px-2.5 py-1 font-mono text-sm text-accent"
           >
             {tech}
           </span>
@@ -257,6 +286,31 @@ function ProjectCard({
 }
 
 export default function Projects() {
+  const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleFilter = (event: Event) => {
+      const skill = (event as CustomEvent<string>).detail;
+      setSelectedSkill(skill);
+      window.setTimeout(() => setSelectedSkill(null), 4500);
+    };
+
+    window.addEventListener(PORTFOLIO_EVENTS.filterProjects, handleFilter);
+    return () =>
+      window.removeEventListener(PORTFOLIO_EVENTS.filterProjects, handleFilter);
+  }, []);
+
+  const matchesSkill = (project: ProjectData) => {
+    if (!selectedSkill) return true;
+    const aliases: Record<string, string[]> = {
+      LLMs: ["Groq", "Ollama", "LM Studio"],
+      React: ["React", "Next.js"],
+      Python: ["Python", "FastAPI"],
+    };
+    const matches = aliases[selectedSkill] ?? [selectedSkill];
+    return project.stack.some((tech) => matches.includes(tech));
+  };
+
   return (
     <div className="section-shell">
       <div className="mx-auto max-w-5xl">
@@ -268,6 +322,30 @@ export default function Projects() {
           Things I&apos;ve Built
         </h2>
 
+        <nav
+          aria-label="Project index"
+          className="sticky top-[3.55rem] z-30 -mx-4 mt-7 flex gap-2 overflow-x-auto border-y border-border bg-bg/95 px-4 py-2 backdrop-blur md:static md:mx-0 md:hidden"
+        >
+          {MAIN_PROJECTS.map((project) => (
+            <a
+              key={project.id}
+              href={`#project-${project.id}`}
+              className="shrink-0 rounded border border-border bg-surface2 px-3 py-1.5 font-mono text-sm text-muted hover:border-accent/50 hover:text-accent"
+            >
+              {project.name}
+            </a>
+          ))}
+        </nav>
+
+        {selectedSkill && (
+          <div className="mt-6 flex items-center justify-between rounded border border-accent/25 bg-accent/5 px-4 py-2 font-mono text-sm text-muted">
+            <span>Highlighting projects using <strong className="text-accent">{selectedSkill}</strong></span>
+            <button type="button" onClick={() => setSelectedSkill(null)} className="text-accent hover:text-accent-bright">
+              clear
+            </button>
+          </div>
+        )}
+
         <div className="mx-auto mt-12 max-w-5xl">
           <div className="space-y-6">
             {FEATURED_PROJECTS.map((project, index) => (
@@ -276,13 +354,14 @@ export default function Projects() {
                 project={project}
                 index={index}
                 featured
+                dimmed={!matchesSkill(project)}
               />
             ))}
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
             {GRID_PROJECTS.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index + 1} />
+              <ProjectCard key={project.id} project={project} index={index + 1} dimmed={!matchesSkill(project)} />
             ))}
           </div>
         </div>
