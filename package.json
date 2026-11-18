@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:chat": "node --test tests/chat-follow-up.test.mjs",
+    "test:keepalive": "node --test tests/chat-keepalive.test.mjs"
   },
   "dependencies": {
     "@ai-sdk/groq": "^4.0.1",

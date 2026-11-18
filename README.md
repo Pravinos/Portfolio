@@ -95,6 +95,16 @@ Metadata in `layout.tsx` sets `metadataBase`, Open Graph, Twitter cards, and key
 
 Hosted on Vercel at [portfolio.prav1nos.me](https://portfolio.prav1nos.me). Environment variables on the host: `GROQ_API_KEY` for the chat API, `NEXT_PUBLIC_SITE_URL` for canonical URLs, `NEXT_PUBLIC_GA_ID` for Google Analytics, and `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` for distributed chat rate limiting.
 
+### Scheduled chat keepalive
+
+`vercel.json` schedules `/api/cron/chat-keepalive` daily at 08:00 UTC. The handler runs the real chat request with `hi` every ten UTC calendar days, anchored to November 18, 2026, and skips all intervening days. The interval continues across month and year boundaries. On Vercel Hobby, execution can occur anywhere within the scheduled hour.
+
+To activate it, set a random `CRON_SECRET` of at least 16 characters in the Vercel project's **Production** environment, then deploy this code. Vercel sends the secret automatically in the Authorization header. Missing or incorrect secrets are rejected. Generate a value with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"` and keep it private.
+
+The job consumes a small amount of Groq usage and uses its own Redis rate-limit key. Check executions under **Vercel Settings > Cron Jobs** and function logs. Non-200 chat responses and AI stream errors produce a failed keepalive response. Vercel does not automatically retry failed cron invocations; the next scheduled chat attempt is ten days later. Restore the database and update its credentials first if the endpoint is already unavailable. No scheduler can guarantee that an external provider will retain a database.
+
+See [Vercel cron security and management](https://vercel.com/docs/cron-jobs/manage-cron-jobs) and [Upstash inactivity policy](https://upstash.com/docs/redis/help/faq).
+
 ### Troubleshooting chat HTTP 503
 
 If Vercel logs show `Chat rate limiter unavailable` with `getaddrinfo ENOTFOUND`, the configured Redis hostname cannot be resolved. This happens before any request reaches Groq. Check that the database is active in the Upstash console, then copy its current REST URL and matching standard REST token into `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in the Vercel environment used by the deployment. Redeploy after updating the values.

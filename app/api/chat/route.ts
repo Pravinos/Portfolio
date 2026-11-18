@@ -9,7 +9,8 @@ export const runtime = "nodejs";
 
 const MAX_BODY_BYTES = 32_000;
 const MAX_MESSAGES = 12;
-const MAX_MESSAGE_CHARS = 2_000;
+const MAX_USER_MESSAGE_CHARS = 2_000;
+const MAX_ASSISTANT_MESSAGE_CHARS = 8_000;
 const MAX_TOTAL_CHARS = 10_000;
 
 function getClientIp(req: NextRequest): string {
@@ -36,16 +37,33 @@ function parseMessages(value: unknown): UIMessage[] | null {
     if (!Array.isArray(candidate.parts) || candidate.parts.length === 0) return null;
 
     const parts: Array<{ type: "text"; text: string }> = [];
+    let messageChars = 0;
     for (const part of candidate.parts) {
       if (!part || typeof part !== "object") return null;
       const textPart = part as Record<string, unknown>;
+      // SDK replies include step boundaries and reasoning alongside visible text.
+      // Keep only the visible answer when replaying assistant history.
+      if (
+        candidate.role === "assistant" &&
+        (textPart.type === "step-start" || textPart.type === "reasoning")
+      ) {
+        continue;
+      }
       if (textPart.type !== "text" || typeof textPart.text !== "string") return null;
       const text = textPart.text.trim();
-      if (!text || text.length > MAX_MESSAGE_CHARS) return null;
+      if (!text) return null;
+      messageChars += text.length;
+      const maxChars = candidate.role === "user"
+        ? MAX_USER_MESSAGE_CHARS
+        : MAX_ASSISTANT_MESSAGE_CHARS;
+      if (messageChars > maxChars) return null;
       totalChars += text.length;
       if (totalChars > MAX_TOTAL_CHARS) return null;
       parts.push({ type: "text", text });
     }
+
+    // An interrupted reasoning-only reply has no visible context to replay.
+    if (candidate.role === "assistant" && parts.length === 0) continue;
 
     messages.push({
       id: typeof candidate.id === "string" ? candidate.id.slice(0, 128) : crypto.randomUUID(),
