@@ -57,13 +57,21 @@ export function formatProviderRateLimitError(error: unknown): string {
 }
 
 export type ChatErrorDisplay = {
-  kind: "rate-limit" | "generic";
+  kind: "rate-limit" | "unavailable" | "generic";
   title: string;
   message: string;
 };
 
 export function resolveChatError(error: Error | undefined): ChatErrorDisplay | null {
   if (!error) return null;
+
+  if (isServiceUnavailableError(error.message)) {
+    return {
+      kind: "unavailable",
+      title: "assistant unavailable",
+      message: "The assistant is temporarily unavailable. Please try again in about 30 seconds.",
+    };
+  }
 
   const jsonRateLimitMessage = parseRateLimitJson(error.message);
   if (jsonRateLimitMessage) {
@@ -121,4 +129,17 @@ function parseRateLimitJson(message: string): string | null {
   }
 
   return null;
+}
+
+function isServiceUnavailableError(message: string): boolean {
+  try {
+    const parsed: unknown = JSON.parse(message);
+    if (!parsed || typeof parsed !== "object" || !("error" in parsed)) return false;
+    return (
+      parsed.error === "SERVICE_UNAVAILABLE" ||
+      parsed.error === "Service temporarily unavailable"
+    );
+  } catch {
+    return false;
+  }
 }

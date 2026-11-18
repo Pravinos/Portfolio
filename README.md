@@ -95,6 +95,14 @@ Metadata in `layout.tsx` sets `metadataBase`, Open Graph, Twitter cards, and key
 
 Hosted on Vercel at [portfolio.prav1nos.me](https://portfolio.prav1nos.me). Environment variables on the host: `GROQ_API_KEY` for the chat API, `NEXT_PUBLIC_SITE_URL` for canonical URLs, `NEXT_PUBLIC_GA_ID` for Google Analytics, and `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` for distributed chat rate limiting.
 
+### Troubleshooting chat HTTP 503
+
+If Vercel logs show `Chat rate limiter unavailable` with `getaddrinfo ENOTFOUND`, the configured Redis hostname cannot be resolved. This happens before any request reaches Groq. Check that the database is active in the Upstash console, then copy its current REST URL and matching standard REST token into `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in the Vercel environment used by the deployment. Redeploy after updating the values.
+
+The production endpoint returns 503 when the rate-limit store is unavailable; it does not bypass the distributed limiter. Redis requests time out after five seconds, and the widget displays a temporary availability message. Fix the database configuration if the error persists.
+
+See [Upstash REST connection details](https://upstash.com/docs/redis/features/restapi) and [inactive database archival](https://upstash.com/docs/redis/help/faq).
+
 ## License
 
 Private - all rights reserved.

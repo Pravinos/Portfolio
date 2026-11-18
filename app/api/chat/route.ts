@@ -86,7 +86,10 @@ export async function POST(req: NextRequest) {
     const rateLimit = await checkChatRateLimit(getClientIp(req));
     if ("unavailable" in rateLimit && rateLimit.unavailable) {
       return Response.json(
-        { error: "Service temporarily unavailable" },
+        {
+          error: "SERVICE_UNAVAILABLE",
+          message: "The assistant is temporarily unavailable. Please try again in about 30 seconds.",
+        },
         { status: 503, headers: { "Retry-After": "30" } },
       );
     }

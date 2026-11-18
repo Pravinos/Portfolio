@@ -54,6 +54,7 @@ export async function checkChatRateLimit(clientId: string): Promise<RateLimitRes
       },
       body: JSON.stringify(["EVAL", script, "1", key, RATE_WINDOW_MS]),
       cache: "no-store",
+      signal: AbortSignal.timeout(5_000),
     });
 
     if (!response.ok) throw new Error(`Rate-limit store returned ${response.status}`);
